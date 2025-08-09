@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
-import { supabase } from '../utils/supabase';
+// import { supabase } from '../utils/supabase';
 import { 
-  Settings as SettingsIcon, 
+
   Church as ChurchIcon, 
   DollarSign, 
   Users, 
@@ -60,7 +60,264 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
   ];
 
   useEffect(() => {
-    loadInitialData();
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        // 기본 헌금 종류
+        const defaultDonationTypes: DonationType[] = [
+          {
+            type_id: 'dt_001',
+            church_id: session.churchId,
+            type_name: '주정헌금',
+            type_code: 'WEEKLY_OFFERING',
+            is_active: true,
+            sort_order: 1,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_002',
+            church_id: session.churchId,
+            type_name: '감사헌금',
+            type_code: 'THANKSGIVING',
+            is_active: true,
+            sort_order: 2,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_003',
+            church_id: session.churchId,
+            type_name: '십일조',
+            type_code: 'TITHE',
+            is_active: true,
+            sort_order: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_004',
+            church_id: session.churchId,
+            type_name: '선교헌금',
+            type_code: 'MISSION',
+            is_active: true,
+            sort_order: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_005',
+            church_id: session.churchId,
+            type_name: '절기헌금',
+            type_code: 'SEASONAL',
+            is_active: true,
+            sort_order: 5,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_006',
+            church_id: session.churchId,
+            type_name: '건축헌금',
+            type_code: 'BUILDING',
+            is_active: true,
+            sort_order: 6,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_007',
+            church_id: session.churchId,
+            type_name: '임직헌금',
+            type_code: 'ORDINATION',
+            is_active: true,
+            sort_order: 7,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_008',
+            church_id: session.churchId,
+            type_name: '장학헌금',
+            type_code: 'SCHOLARSHIP',
+            is_active: true,
+            sort_order: 8,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_009',
+            church_id: session.churchId,
+            type_name: '주일헌금',
+            type_code: 'SUNDAY_OFFERING',
+            is_active: true,
+            sort_order: 9,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            type_id: 'dt_010',
+            church_id: session.churchId,
+            type_name: '목적헌금',
+            type_code: 'PURPOSE_OFFERING',
+            is_active: true,
+            sort_order: 10,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+
+        // 기본 직분 (단순하게)
+        const defaultPositions: Position[] = [
+          {
+            position_id: 'pos_001',
+            church_id: session.churchId,
+            position_name: '목사',
+            position_code: 'PASTOR',
+            is_active: true,
+            sort_order: 1,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_002',
+            church_id: session.churchId,
+            position_name: '부목사',
+            position_code: 'ASSOC_PASTOR',
+            is_active: true,
+            sort_order: 2,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_003',
+            church_id: session.churchId,
+            position_name: '전도사',
+            position_code: 'EVANGELIST',
+            is_active: true,
+            sort_order: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_004',
+            church_id: session.churchId,
+            position_name: '장로',
+            position_code: 'ELDER',
+            is_active: true,
+            sort_order: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_005',
+            church_id: session.churchId,
+            position_name: '권사',
+            position_code: 'DEACONESS',
+            is_active: true,
+            sort_order: 5,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_006',
+            church_id: session.churchId,
+            position_name: '안수집사',
+            position_code: 'ORDAINED_DEACON',
+            is_active: true,
+            sort_order: 6,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_007',
+            church_id: session.churchId,
+            position_name: '집사',
+            position_code: 'DEACON',
+            is_active: true,
+            sort_order: 7,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            position_id: 'pos_008',
+            church_id: session.churchId,
+            position_name: '성도',
+            position_code: 'MEMBER',
+            is_active: true,
+            sort_order: 8,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+
+        // 기본 직분 상태
+        const defaultPositionStatuses: PositionStatus[] = [
+          {
+            status_id: 'st_001',
+            church_id: session.churchId,
+            status_name: '시무',
+            status_code: 'ACTIVE',
+            is_active: true,
+            sort_order: 1,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            status_id: 'st_002',
+            church_id: session.churchId,
+            status_name: '은퇴',
+            status_code: 'RETIRED',
+            is_active: true,
+            sort_order: 2,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            status_id: 'st_003',
+            church_id: session.churchId,
+            status_name: '협동',
+            status_code: 'ASSOCIATE',
+            is_active: true,
+            sort_order: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            status_id: 'st_004',
+            church_id: session.churchId,
+            status_name: '원로',
+            status_code: 'EMERITUS',
+            is_active: true,
+            sort_order: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            status_id: 'st_005',
+            church_id: session.churchId,
+            status_name: '직원',
+            status_code: 'STAFF',
+            is_active: true,
+            sort_order: 5,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+
+        setDonationTypes(defaultDonationTypes);
+        setPositions(defaultPositions);
+        setPositionStatuses(defaultPositionStatuses);
+
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+        showMessage('error', '초기 데이터 로드에 실패했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadInitialData = async () => {

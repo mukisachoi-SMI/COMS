@@ -1,9 +1,36 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://udmnzwpnwunbxfkbcjop.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkbW56d3Bud3VuYnhma2Jjam9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTMyNDUsImV4cCI6MjA3MDE4OTI0NX0.Q9dx_KONwgmVO3ON_GZ028-KtQfZTkHap0JFB63dLss';
+// 환경변수에서 읽기 (Netlify 배포용)
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://udmnzwpnwunbxfkbcjop.supabase.co';
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkbW56d3Bud3VuYnhma2Jjam9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MTMyNDUsImV4cCI6MjA3MDE4OTI0NX0.Q9dx_KONwgmVO3ON_GZ028-KtQfZTkHap0JFB63dLss';
+
+// 디버깅용 콘솔 (프로덕션에서는 제거)
+console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Key exists:', !!supabaseAnonKey);
+console.log('Environment:', process.env.NODE_ENV);
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// 연결 테스트 함수
+export const testConnection = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('churches')
+      .select('*')
+      .limit(1);
+    
+    if (error) {
+      console.error('Supabase connection error:', error);
+      return { success: false, error: error.message };
+    }
+    
+    console.log('Supabase connected successfully');
+    return { success: true, data };
+  } catch (err) {
+    console.error('Connection test failed:', err);
+    return { success: false, error: err };
+  }
+};
 
 // 헬퍼 함수들
 export const withChurchFilter = (query: any, churchId: string) => {

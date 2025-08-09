@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChurchSession } from '../types';
 import { supabase } from '../utils/supabase';
 import { 
@@ -6,12 +6,11 @@ import {
   TrendingDown,
   Users, 
   DollarSign,
-  Calendar,
+
   Award,
   Activity,
   Gift,
-  Heart,
-  Star,
+
   ChevronRight,
   ArrowUp,
   ArrowDown,
@@ -24,8 +23,7 @@ import {
   Search,
   ChevronDown,
   Sparkles,
-  Zap,
-  TrendingUp as Trend,
+
   Eye,
   Clock,
   Filter,

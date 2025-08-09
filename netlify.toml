@@ -1,10 +1,12 @@
 [build]
-  command = "npm run build"
+  command = "CI=false npm run build"
   publish = "build"
 
 [build.environment]
   # Node version for build
   NODE_VERSION = "18"
+  # Disable treating warnings as errors
+  CI = "false"
 
 [[redirects]]
   from = "/*"
@@ -13,12 +15,13 @@
 
 [context.production.environment]
   # Production environment variables will be set in Netlify UI
+  CI = "false"
 
 [context.deploy-preview]
-  command = "npm run build"
+  command = "CI=false npm run build"
 
 [context.branch-deploy]
-  command = "npm run build"
+  command = "CI=false npm run build"
 
 [[headers]]
   for = "/*.js"

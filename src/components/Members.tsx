@@ -73,7 +73,22 @@ const Members: React.FC<MembersProps> = ({ session }) => {
   });
 
   useEffect(() => {
-    loadInitialData();
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        await Promise.all([
+          loadMembers(),
+          loadPositions(),
+          loadPositionStatuses()
+        ]);
+      } catch (err) {
+        console.error('Initial data loading error:', err);
+        setError('데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
   }, [session.churchId]);
 
   const loadInitialData = async () => {

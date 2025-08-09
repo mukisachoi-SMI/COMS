@@ -12,7 +12,7 @@ export class IDGenerator {
     try {
       // 1. 트랜잭션 없이 간단하게 처리
       // 현재 순번 조회
-      const { data: existingData, error: selectError } = await supabase
+      const { data: existingData } = await supabase
         .from('id_sequences')
         .select('current_number')
         .eq('church_id', churchId)

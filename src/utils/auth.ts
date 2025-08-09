@@ -27,7 +27,7 @@ export const login = async (loginId: string, password: string): Promise<ChurchSe
     }
 
     // 사용자 정보 조회
-    const { data: userData, error: userError } = await supabase
+    const { data: userData } = await supabase
       .from('users')
       .select('user_name')
       .eq('church_id', churchData.church_id)

@@ -8,6 +8,7 @@ import MobileDonation from './components/MobileDonation';
 import Settings from './components/Settings';
 import Reports from './components/Reports';
 import Layout from './components/Layout';
+import ConnectionTest from './components/ConnectionTest';
 import { ChurchSession } from './types';
 import { getCurrentSession, setupAutoLogout, refreshSession } from './utils/auth';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -63,7 +64,13 @@ function App() {
 
   // 로그인되지 않은 경우
   if (!session) {
-    return <LoginForm onLogin={handleLogin} />;
+    return (
+      <>
+        <LoginForm onLogin={handleLogin} />
+        {/* 개발/디버깅용 연결 테스트 */}
+        {process.env.NODE_ENV === 'development' && <ConnectionTest />}
+      </>
+    );
   }
 
   // 로그인된 경우 - 메인 애플리케이션
