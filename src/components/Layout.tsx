@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChurchSession } from '../types';
+import ChurchLogo from './ChurchLogo';
 import { 
   Church, 
   Home, 
@@ -72,9 +73,11 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
         {/* 교회 정보 */}
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-primary-600" />
-            </div>
+            <ChurchLogo 
+              logoUrl={session.churchLogo}
+              churchName={session.churchName}
+              size="md"
+            />
             <div className="ml-3">
               <div className="text-sm font-semibold text-gray-900">{session.churchName}</div>
               <div className="text-xs text-gray-500">{session.userName}</div>
@@ -161,9 +164,11 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
         {/* 교회 정보 */}
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-              <User className="w-6 h-6 text-primary-600" />
-            </div>
+            <ChurchLogo 
+              logoUrl={session.churchLogo}
+              churchName={session.churchName}
+              size="lg"
+            />
             <div className="ml-3">
               <div className="font-semibold text-gray-900">{session.churchName}</div>
               <div className="text-sm text-gray-500">{session.userName}</div>
@@ -310,9 +315,11 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
 
                 {/* 사용자 정보 (데스크톱) */}
                 <div className="hidden sm:flex items-center ml-3">
-                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-primary-600" />
-                  </div>
+                  <ChurchLogo 
+                    logoUrl={session.churchLogo}
+                    churchName={session.churchName}
+                    size="sm"
+                  />
                   <div className="ml-2 hidden lg:block">
                     <div className="text-sm font-medium text-gray-900">{session.userName}</div>
                     <div className="text-xs text-gray-500">관리자</div>

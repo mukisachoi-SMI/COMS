@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChurchSession } from '../types';
 import { login } from '../utils/auth';
+import ChurchLogo from './ChurchLogo';
+import { supabase } from '../utils/supabase';
 import { Church, Users, Lock, AlertCircle } from 'lucide-react';
 
 interface LoginFormProps {
@@ -12,6 +14,43 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [churchLogo, setChurchLogo] = useState<string>('');
+  const [churchName, setChurchName] = useState<string>('');
+
+  // 로그인 ID가 변경될 때 교회 로고 미리보기
+  useEffect(() => {
+    const fetchChurchLogo = async () => {
+      if (!loginId || loginId.length < 3) {
+        setChurchLogo('');
+        setChurchName('');
+        return;
+      }
+
+      try {
+        const { data } = await supabase
+          .from('churches')
+          .select('church_name, logo_url')
+          .eq('login_id', loginId)
+          .eq('status', 'active')
+          .single();
+
+        if (data) {
+          setChurchLogo(data.logo_url || '');
+          setChurchName(data.church_name || '');
+        } else {
+          setChurchLogo('');
+          setChurchName('');
+        }
+      } catch (err) {
+        // 오류 무시 (로고 미리보기는 필수 기능이 아님)
+        setChurchLogo('');
+        setChurchName('');
+      }
+    };
+
+    const debounceTimer = setTimeout(fetchChurchLogo, 500);
+    return () => clearTimeout(debounceTimer);
+  }, [loginId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,9 +84,23 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       <div className="w-full max-w-md">
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-full mb-4">
-            <Church className="w-8 h-8 text-white" />
-          </div>
+          {churchLogo || churchName ? (
+            <div className="mb-4">
+              <ChurchLogo
+                logoUrl={churchLogo}
+                churchName={churchName}
+                size="xl"
+                className="mx-auto"
+              />
+              {churchName && (
+                <p className="mt-3 text-lg font-semibold text-gray-800">{churchName}</p>
+              )}
+            </div>
+          ) : (
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-full mb-4">
+              <Church className="w-8 h-8 text-white" />
+            </div>
+          )}
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             교회 헌금관리시스템
           </h1>

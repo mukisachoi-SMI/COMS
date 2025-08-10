@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
 import { supabase } from '../utils/supabase';
+import ChurchLogoUpload from './ChurchLogoUpload';
 import { 
   Church as ChurchIcon, 
   DollarSign, 
@@ -33,6 +34,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   // 교회 정보 상태
+  const [churchLogo, setChurchLogo] = useState<string>('');
   const [churchInfo, setChurchInfo] = useState<Partial<Church>>({
     church_name: session.churchName || '',
     email: session.email || '',
@@ -131,6 +133,10 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
           church_address: data.church_address || '',
           kakao_id: data.kakao_id || ''
         });
+        // 로고 URL도 설정
+        if (data.logo_url) {
+          setChurchLogo(data.logo_url);
+        }
       }
     } catch (error) {
       console.error('Exception in loadChurchInfo:', error);
@@ -688,6 +694,19 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     
     return (
       <div className="space-y-6">
+        {/* 교회 로고 업로드 */}
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">교회 로고</h3>
+          <ChurchLogoUpload
+            churchId={session.churchId}
+            currentLogoUrl={churchLogo}
+            onUploadSuccess={(url) => {
+              setChurchLogo(url);
+              // 세션 업데이트는 ChurchLogoUpload 컴포넌트에서 처리됨
+            }}
+          />
+        </div>
+
         {/* 교회 기본 정보 입력 폼 */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="flex justify-between items-center mb-6">

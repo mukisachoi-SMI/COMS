@@ -93,6 +93,7 @@ export interface IDSequence {
 export interface ChurchSession {
   churchId: string;
   churchName: string;
+  churchLogo?: string;
   loginId: string;
   email: string;
   userName: string;

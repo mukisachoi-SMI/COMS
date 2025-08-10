@@ -12,7 +12,7 @@ export const login = async (loginId: string, password: string): Promise<ChurchSe
     // 교회 정보 조회
     const { data: churchData, error: churchError } = await supabase
       .from('churches')
-      .select('church_id, church_name, login_id, email, password')
+      .select('church_id, church_name, login_id, email, password, logo_url')
       .eq('login_id', loginId)
       .eq('status', 'active')
       .single();
@@ -40,6 +40,7 @@ export const login = async (loginId: string, password: string): Promise<ChurchSe
     const sessionData: ChurchSession = {
       churchId: churchData.church_id,
       churchName: churchData.church_name,
+      churchLogo: churchData.logo_url || undefined,
       loginId: churchData.login_id,
       email: churchData.email,
       userName: userData?.user_name || '관리자'
@@ -136,7 +137,7 @@ export const refreshSession = async (): Promise<ChurchSession | null> => {
     // 교회 정보 재조회로 세션 갱신
     const { data: churchData, error } = await supabase
       .from('churches')
-      .select('church_id, church_name, login_id, email')
+      .select('church_id, church_name, login_id, email, logo_url')
       .eq('church_id', currentSession.churchId)
       .eq('status', 'active')
       .single();
@@ -149,6 +150,7 @@ export const refreshSession = async (): Promise<ChurchSession | null> => {
     const updatedSession: ChurchSession = {
       ...currentSession,
       churchName: churchData.church_name,
+      churchLogo: churchData.logo_url || undefined,
       email: churchData.email
     };
 
