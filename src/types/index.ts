@@ -42,6 +42,8 @@ export interface Member {
   register_date: string;
   status: string;
   notes?: string;
+  position_id?: string;  // 직분 ID
+  position_status_id?: string;  // 직분 상태 ID (예: "church123_status_002")
   created_at: string;
   updated_at: string;
 }
@@ -103,7 +105,7 @@ export interface MemberFormData {
   address?: string;
   birth_date?: string;
   position_id?: string;
-  position_status_id?: string;
+  position_status_id?: string;  // 예: "church123_status_002" (청년)
   notes?: string;
 }
 
@@ -177,9 +179,10 @@ export interface Position {
   updated_at: string;
 }
 
-// 직분 상태 (시무/은퇴/협동/원로/직원)
+// 직분 상태 (시무/청년/은퇴/협동/원로/직원)
+// status_id 형식: 교회ID_status_001~006
 export interface PositionStatus {
-  status_id: string;
+  status_id: string;  // 예: "church123_status_001" (시무)
   church_id: string;
   status_name: string;
   status_code: string;
@@ -192,7 +195,7 @@ export interface PositionStatus {
 // 확장된 교인 정보 (직분 포함)
 export interface ExtendedMember extends Member {
   position_id?: string;
-  position_status_id?: string;
+  position_status_id?: string;  // 예: "church123_status_002" (청년)
   position?: Position;
   position_status?: PositionStatus;
 }

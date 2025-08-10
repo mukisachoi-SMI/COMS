@@ -96,44 +96,81 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     try {
       console.log('Loading church info for:', session.churchId);
       
+      // 특정 필드만 명시적으로 선택
       const { data, error } = await supabase
         .from('churches')
-        .select('*')
+        .select('church_id, church_name, email, church_phone, church_address, kakao_id')
         .eq('church_id', session.churchId)
         .single();
 
       console.log('Church info query result:', { data, error });
+      console.log('Raw data fields:', data ? Object.keys(data) : 'No data');
 
       if (error) {
         console.error('Church info load error:', error);
-        // 에러가 있어도 세션 정보는 유지
-        setChurchInfo(prev => ({
-          ...prev,
-          church_name: session.churchName || prev.church_name,
-          email: session.email || prev.email
-        }));
+        // 데이터베이스에서 가져오지 못했을 때 세션 정보만 사용
+        setChurchInfo({
+          church_id: session.churchId,
+          church_name: session.churchName || '',
+          email: session.email || '',
+          church_phone: '',
+          church_address: '',
+          kakao_id: ''
+        });
+        
+        // 테이블 구조 확인을 위한 추가 쿼리
+        const { data: testData, error: testError } = await supabase
+          .from('churches')
+          .select('*')
+          .limit(1);
+        
+        if (testData && testData.length > 0) {
+          console.log('Available columns in churches table:', Object.keys(testData[0]));
+        }
         return;
       }
 
       if (data) {
-        console.log('Setting church info:', data);
-        setChurchInfo({
+        console.log('Setting church info with data:', {
           church_id: data.church_id,
-          church_name: data.church_name || session.churchName,
-          email: data.email || session.email,
+          church_name: data.church_name,
+          email: data.email,
+          church_phone: data.church_phone,
+          church_address: data.church_address,
+          kakao_id: data.kakao_id
+        });
+        
+        setChurchInfo({
+          church_id: data.church_id || session.churchId,
+          church_name: data.church_name || session.churchName || '',
+          email: data.email || session.email || '',
           church_phone: data.church_phone || '',
           church_address: data.church_address || '',
           kakao_id: data.kakao_id || ''
+        });
+      } else {
+        // 데이터가 없으면 기본값 설정
+        console.log('No church data found, using defaults');
+        setChurchInfo({
+          church_id: session.churchId,
+          church_name: session.churchName || '',
+          email: session.email || '',
+          church_phone: '',
+          church_address: '',
+          kakao_id: ''
         });
       }
     } catch (error) {
       console.error('Failed to load church info:', error);
       // 에러가 있어도 세션 정보는 유지
-      setChurchInfo(prev => ({
-        ...prev,
-        church_name: session.churchName || prev.church_name,
-        email: session.email || prev.email
-      }));
+      setChurchInfo({
+        church_id: session.churchId,
+        church_name: session.churchName || '',
+        email: session.email || '',
+        church_phone: '',
+        church_address: '',
+        kakao_id: ''
+      });
     }
   };
 
@@ -294,7 +331,8 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       const { data, error } = await supabase
         .from('position_statuses')
         .insert(defaultStatuses)
-        .select();
+        .select()
+        .order('sort_order', { ascending: true });
       
       console.log('Create position statuses result:', { data, error });
       
@@ -392,9 +430,21 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     try {
       console.log('Saving church info:', churchInfo);
       
+      // 먼저 교회 데이터가 존재하는지 확인
+      const { data: existingData, error: checkError } = await supabase
+        .from('churches')
+        .select('church_id')
+        .eq('church_id', session.churchId)
+        .single();
+
+      if (checkError) {
+        console.error('Check error:', checkError);
+        throw new Error('교회 정보를 확인할 수 없습니다.');
+      }
+
       const updateData = {
-        church_name: churchInfo.church_name,
-        email: churchInfo.email,
+        church_name: churchInfo.church_name || session.churchName,
+        email: churchInfo.email || session.email,
         church_phone: churchInfo.church_phone || null,
         church_address: churchInfo.church_address || null,
         kakao_id: churchInfo.kakao_id || null,
@@ -402,24 +452,49 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       };
 
       console.log('Update data:', updateData);
+      console.log('Updating church_id:', session.churchId);
 
       const { data, error } = await supabase
         .from('churches')
         .update(updateData)
         .eq('church_id', session.churchId)
-        .select();
+        .select('church_id, church_name, email, church_phone, church_address, kakao_id');
 
       console.log('Update result:', { data, error });
 
       if (error) {
-        console.error('Update error:', error);
+        console.error('Update error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        
+        // 필드가 없을 경우를 대비한 에러 처리
+        if (error.message.includes('column')) {
+          throw new Error('데이터베이스 스키마가 최신이 아닙니다. database_church_info_update.sql을 실행해주세요.');
+        }
         throw error;
       }
 
-      showMessage('success', '교회 정보가 저장되었습니다.');
-      
-      // 저장 후 다시 로드
-      await loadChurchInfo();
+      if (data && data.length > 0) {
+        console.log('Successfully saved:', data[0]);
+        showMessage('success', '교회 정보가 저장되었습니다.');
+        
+        // 저장된 데이터로 상태 업데이트
+        setChurchInfo({
+          church_id: data[0].church_id,
+          church_name: data[0].church_name || '',
+          email: data[0].email || '',
+          church_phone: data[0].church_phone || '',
+          church_address: data[0].church_address || '',
+          kakao_id: data[0].kakao_id || ''
+        });
+      } else {
+        showMessage('success', '교회 정보가 저장되었습니다.');
+        // 저장 후 다시 로드
+        await loadChurchInfo();
+      }
     } catch (error: any) {
       console.error('Failed to save church info:', error);
       showMessage('error', `교회 정보 저장 실패: ${error.message || '알 수 없는 오류'}`);

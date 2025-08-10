@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { testConnection } from '../utils/supabase';
-import { CheckCircle, XCircle, Loader, AlertCircle } from 'lucide-react';
+import { testConnection, supabase } from '../utils/supabase';
+import { CheckCircle, XCircle, Loader, AlertCircle, Database } from 'lucide-react';
 
 const ConnectionTest: React.FC = () => {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState<string>('');
   const [details, setDetails] = useState<any>(null);
+  const [tableSchema, setTableSchema] = useState<any>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     checkConnection();
@@ -21,11 +23,33 @@ const ConnectionTest: React.FC = () => {
       if (result.success) {
         setStatus('success');
         setMessage('Supabase 연결 성공!');
+        
+        // churches 테이블 필드 확인
+        const { data: churchData, error: churchError } = await supabase
+          .from('churches')
+          .select('*')
+          .limit(1);
+        
+        let schemaInfo = null;
+        if (churchData && churchData.length > 0) {
+          const fields = Object.keys(churchData[0]);
+          schemaInfo = {
+            totalFields: fields.length,
+            fields: fields,
+            hasPhoneField: fields.includes('church_phone'),
+            hasAddressField: fields.includes('church_address'),
+            hasKakaoField: fields.includes('kakao_id'),
+            sampleData: churchData[0]
+          };
+          setTableSchema(schemaInfo);
+        }
+        
         setDetails({
           url: process.env.REACT_APP_SUPABASE_URL || 'Using default URL',
           hasKey: !!process.env.REACT_APP_SUPABASE_ANON_KEY,
           environment: process.env.NODE_ENV,
-          data: result.data
+          data: result.data,
+          churchTableSchema: schemaInfo
         });
       } else {
         setStatus('error');
@@ -61,14 +85,69 @@ const ConnectionTest: React.FC = () => {
             <h3 className="font-semibold text-gray-900">Supabase 연결 상태</h3>
             <p className="text-sm text-gray-600 mt-1">{message}</p>
             
+            {status === 'success' && tableSchema && (
+              <div className="mt-3 text-xs">
+                <div className="flex items-center space-x-4 mb-2">
+                  <Database className="w-4 h-4 text-blue-500" />
+                  <span className="font-semibold">Churches 테이블 필드 상태:</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center">
+                    {tableSchema.hasPhoneField ? (
+                      <CheckCircle className="w-3 h-3 text-green-500 mr-1" />
+                    ) : (
+                      <XCircle className="w-3 h-3 text-red-500 mr-1" />
+                    )}
+                    <span>church_phone</span>
+                  </div>
+                  <div className="flex items-center">
+                    {tableSchema.hasAddressField ? (
+                      <CheckCircle className="w-3 h-3 text-green-500 mr-1" />
+                    ) : (
+                      <XCircle className="w-3 h-3 text-red-500 mr-1" />
+                    )}
+                    <span>church_address</span>
+                  </div>
+                  <div className="flex items-center">
+                    {tableSchema.hasKakaoField ? (
+                      <CheckCircle className="w-3 h-3 text-green-500 mr-1" />
+                    ) : (
+                      <XCircle className="w-3 h-3 text-red-500 mr-1" />
+                    )}
+                    <span>kakao_id</span>
+                  </div>
+                  <div className="text-gray-500">
+                    총 {tableSchema.totalFields}개 필드
+                  </div>
+                </div>
+                
+                {(!tableSchema.hasPhoneField || !tableSchema.hasAddressField || !tableSchema.hasKakaoField) && (
+                  <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                    <p className="text-yellow-700 font-semibold">⚠️ 필드 업데이트 필요</p>
+                    <p className="text-yellow-600 mt-1">
+                      database_church_info_update.sql 파일을 Supabase SQL Editor에서 실행해주세요.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+            
             {details && (
-              <details className="mt-3">
-                <summary className="cursor-pointer text-xs text-gray-500 hover:text-gray-700">
-                  상세 정보 보기
+              <details className="mt-3" open={showDetails}>
+                <summary 
+                  className="cursor-pointer text-xs text-gray-500 hover:text-gray-700"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowDetails(!showDetails);
+                  }}
+                >
+                  상세 정보 {showDetails ? '숨기기' : '보기'}
                 </summary>
-                <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
-                  {JSON.stringify(details, null, 2)}
-                </pre>
+                {showDetails && (
+                  <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
+                    {JSON.stringify(details, null, 2)}
+                  </pre>
+                )}
               </details>
             )}
             

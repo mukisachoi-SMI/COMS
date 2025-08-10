@@ -622,7 +622,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
                   className="input"
-                  placeholder="서울시 강남구..."
+                  placeholder="서울시 중구..."
                 />
               </div>
 
