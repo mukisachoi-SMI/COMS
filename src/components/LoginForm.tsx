@@ -35,9 +35,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   const testAccounts = [
-    { id: 'seoulcentral', name: '서울중앙교회', password: 'seoul2025!' },
-    { id: 'busan1st', name: '부산성심교회', password: 'busan2025!' },
-    { id: 'daegucentral', name: '대구믿음교회', password: 'daegu2025!' }
+    { id: 'seoulch', name: '서울교회', password: 'seoul2025!' },
+    { id: 'kanaanch', name: '가나안 한인교회', password: 'kanaan2025!' },
+    { id: 'galileech', name: '시드니 갈릴리교회', password: 'galilee2025!' }
   ];
 
   return (
@@ -79,7 +79,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                 value={loginId}
                 onChange={(e) => setLoginId(e.target.value)}
                 className="input"
-                placeholder="예: seoulcentral"
+                placeholder="예: seoulch"
                 disabled={isLoading}
                 autoComplete="username"
               />
@@ -140,14 +140,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             ))}
           </div>
           <p className="text-xs text-gray-500 mt-3 p-2 bg-blue-50 rounded border-l-2 border-blue-200">
-            💡 <strong>훨씬 간단해졌습니다!</strong><br/>
-            이제 기억하기 쉬운 패스워드를 직접 설정할 수 있습니다.
+            💡 <strong>한인교회 헌금관리시스템입니다!</strong><br/>
+              이제 쉽고 편리하고 빠르게 헌금관리를 할 수 있습니다.
           </p>
         </div>
 
         {/* 푸터 */}
         <div className="text-center mt-8 text-sm text-gray-500">
-          <p>문의사항이 있으시면 시스템 관리자에게 연락하세요</p>
+          <p>문의사항이 있으시면 시스템 관리자에게 연락하세요</p><br/>
+             한인 디아스포라 네트워크
         </div>
       </div>
     </div>

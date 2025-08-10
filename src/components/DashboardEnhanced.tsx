@@ -763,7 +763,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
                   <Target className="w-4 h-4 text-yellow-300" />
-                  <span className="text-sm font-medium">이번달 목표</span>
+                  <span className="text-sm font-medium">이번달 누적</span>
                 </div>
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
                   {stats.goalProgress.toFixed(0)}% 달성

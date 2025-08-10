@@ -332,8 +332,16 @@ const Members: React.FC<MembersProps> = ({ session }) => {
   // 통계 계산
   const stats = {
     totalMembers: filteredMembers.length,
-    withPosition: filteredMembers.filter(m => getPositionName(m)).length,
-    withPhone: filteredMembers.filter(m => m.phone).length
+    // 항존직: 장로, 권사, 안수집사
+    permanentPositions: filteredMembers.filter(m => {
+      const positionName = getPositionName(m);
+      return positionName === '장로' || positionName === '권사' || positionName === '안수집사';
+    }).length,
+    // 다음세대: 직분상태가 '청년'인 경우
+    nextGeneration: filteredMembers.filter(m => {
+      const statusName = getPositionStatusName(m);
+      return statusName === '청년';
+    }).length
   };
 
   return (
@@ -397,20 +405,22 @@ const Members: React.FC<MembersProps> = ({ session }) => {
         
         <div className="card">
           <div className="flex items-center">
-            <Briefcase className="w-8 h-8 text-green-500 mr-4" />
+            <UserCheck className="w-8 h-8 text-green-500 mr-4" />
             <div>
-              <p className="text-sm text-gray-500">직분 보유</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.withPosition}명</p>
+              <p className="text-sm text-gray-500">항존직</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.permanentPositions}명</p>
+              <p className="text-xs text-gray-400 mt-1">장로, 권사, 안수집사</p>
             </div>
           </div>
         </div>
 
         <div className="card">
           <div className="flex items-center">
-            <Phone className="w-8 h-8 text-purple-500 mr-4" />
+            <Activity className="w-8 h-8 text-purple-500 mr-4" />
             <div>
-              <p className="text-sm text-gray-500">연락처 등록</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.withPhone}명</p>
+              <p className="text-sm text-gray-500">다음세대</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.nextGeneration}명</p>
+              <p className="text-xs text-gray-400 mt-1">청년</p>
             </div>
           </div>
         </div>
