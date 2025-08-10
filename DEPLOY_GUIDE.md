@@ -72,11 +72,38 @@ Netlify 대시보드에서 다음 환경변수를 설정하세요:
 
 ## 📱 PWA 설정 확인
 
-배포 후 다음 사항 테스트:
+### 아이콘 설정
+1. **아이콘 파일 준비**
+   - 포함된 HTML 아이콘 생성기를 사용하여 모든 크기의 PNG 파일 생성
+   - 다운로드한 파일들을 `/public` 폴더에 저장:
+     - favicon-16x16.png
+     - favicon-32x32.png
+     - icon-72x72.png
+     - icon-96x96.png
+     - icon-128x128.png
+     - icon-144x144.png
+     - icon-152x152.png
+     - logo192.png (기존 파일 교체)
+     - icon-384x384.png
+     - logo512.png (기존 파일 교체)
+
+2. **manifest.json 확인**
+   - 모든 아이콘 경로가 올바른지 확인
+   - purpose: "any maskable" 속성 확인
+
+3. **브라우저 호환성**
+   - Chrome/Edge: 설치 버튼 표시
+   - Safari (iOS): 홈 화면에 추가
+   - Samsung Internet: 자동 설치 배너
+
+### 배포 후 테스트:
 - [ ] PWA 설치 프롬프트 작동
+- [ ] 설치된 앱 아이콘이 올바른 이미지로 표시
 - [ ] 오프라인 모드 테스트
 - [ ] 푸시 알림 (구현 시)
 - [ ] 모바일 반응형 디자인
+- [ ] iOS Safari에서 홈 화면 추가 테스트
+- [ ] Android Chrome에서 설치 테스트
 
 ## 🚀 자동 배포 워크플로우
 
