@@ -132,8 +132,15 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
           contentType: 'image/jpeg',
           upsert: true
         });
-
-      if (error) throw error;
+      
+      if (error) {
+        if (error.message?.includes('not found')) {
+          throw new Error('Storage 버킷이 생성되지 않았습니다. Supabase Storage에서 "church-logos" 버킷을 생성해주세요.');
+        } else if (error.message?.includes('policy')) {
+          throw new Error('Storage 권한이 설정되지 않았습니다. 버킷을 Public으로 설정해주세요.');
+        }
+        throw error;
+      }
 
       // Public URL 가져오기
       const { data: { publicUrl } } = supabase.storage
@@ -162,9 +169,10 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
       onUploadSuccess(publicUrl);
       alert('로고가 성공적으로 업로드되었습니다.');
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Logo upload error:', error);
-      alert('로고 업로드에 실패했습니다.');
+      const errorMessage = error.message || '로고 업로드에 실패했습니다.';
+      alert(errorMessage);
     } finally {
       setIsUploading(false);
     }
