@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ChurchSession, Member, MemberFormData, Position, PositionStatus } from '../types';
 import { supabase } from '../utils/supabase';
 import { IDGenerator } from '../utils/idGenerator';
@@ -44,6 +45,7 @@ interface MemberFilters {
 }
 
 const Members: React.FC<MembersProps> = ({ session }) => {
+  const location = useLocation();
   const [members, setMembers] = useState<Member[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
   const [positionStatuses, setPositionStatuses] = useState<PositionStatus[]>([]);
@@ -90,6 +92,15 @@ const Members: React.FC<MembersProps> = ({ session }) => {
     };
     loadData();
   }, [session.churchId]);
+
+  // 대시보드에서 교인등록 버튼을 통해 왔을 경우 자동으로 폼 열기
+  useEffect(() => {
+    if (location.state && (location.state as any).openAddMember) {
+      setShowAddForm(true);
+      // state 초기화 (다시 돌아왔을 때 자동으로 열리지 않도록)
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const loadInitialData = async () => {
     try {

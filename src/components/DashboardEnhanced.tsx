@@ -259,6 +259,67 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
     setTimeout(() => setIsRefreshing(false), 500);
   };
 
+  // 대시보드 공유 기능
+  const handleShare = async () => {
+    const shareData = {
+      title: `${session.churchName} 대시보드`,
+      text: `${session.churchName} 이번달 헌금 현황\n\n` +
+            `📊 총 헌금: ${formatCurrency(stats.monthlyDonation)}\n` +
+            `👥 전체 교인: ${stats.totalMembers}명\n` +
+            `📈 목표 달성률: ${stats.goalProgress.toFixed(0)}%\n\n` +
+            `#교회헌금관리 #${session.churchName}`,
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        // 네이티브 공유 API 사용 (모바일)
+        await navigator.share(shareData);
+        console.log('Dashboard shared successfully');
+      } else {
+        // 웹 브라우저에서 클립보드 복사
+        const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+        
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(shareText);
+          
+          // 복사 완료 알림 표시
+          const toast = document.createElement('div');
+          toast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+          toast.textContent = '📋 대시보드 정보가 클립보드에 복사되었습니다!';
+          document.body.appendChild(toast);
+          
+          setTimeout(() => {
+            toast.classList.add('animate-fade-out');
+            setTimeout(() => document.body.removeChild(toast), 300);
+          }, 3000);
+        } else {
+          // 구형 브라우저 대응
+          const textArea = document.createElement('textarea');
+          textArea.value = shareText;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          try {
+            document.execCommand('copy');
+            alert('대시보드 정보가 클립보드에 복사되었습니다!');
+          } catch (err) {
+            console.error('Failed to copy:', err);
+            alert('복사에 실패했습니다. 수동으로 복사해주세요.');
+          } finally {
+            document.body.removeChild(textArea);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error sharing dashboard:', error);
+      alert('공유 중 오류가 발생했습니다.');
+    }
+  };
+
   useEffect(() => {
     loadDashboardData();
     
@@ -1011,7 +1072,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
           </button>
           
           <button 
-            onClick={() => navigate('/members/add')}
+            onClick={() => navigate('/members', { state: { openAddMember: true } })}
             className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all active:scale-95 group"
           >
             <div className="flex flex-col items-center space-y-2">
@@ -1050,7 +1111,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
         {/* 공유 및 다운로드 */}
         <div className="flex space-x-3">
           <button 
-            onClick={() => {/* 보고서 다운로드 로직 */}}
+            onClick={() => navigate('/reports')}
             className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-2xl py-3 px-4 shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center justify-center space-x-2"
           >
             <Download className="w-5 h-5" />
@@ -1058,7 +1119,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
           </button>
           
           <button 
-            onClick={() => {/* 공유 로직 */}}
+            onClick={() => handleShare()}
             className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-2xl py-3 px-4 shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center justify-center space-x-2"
           >
             <Share2 className="w-5 h-5" />
@@ -1128,6 +1189,35 @@ const styles = `
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  @keyframes slide-up {
+    0% {
+      transform: translate(-50%, 100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, 10px);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+
+  .animate-fade-out {
+    animation: fade-out 0.3s ease-out;
   }
 `;
 
