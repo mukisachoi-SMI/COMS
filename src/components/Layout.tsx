@@ -237,15 +237,8 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
           <span className="text-xs mt-1 font-medium">교인</span>
         </Link>
         
-        {/* 헌금 등록 (중앙 버튼) */}
-        <div className="bottom-nav-center">
-          <Link
-            to="/donations/quick"
-            className="bottom-nav-center-button"
-          >
-            <Plus className="w-6 h-6" />
-          </Link>
-        </div>
+        {/* 빈 공간 - 중앙 버튼을 위한 자리 */}
+        <div></div>
         
         {/* 보고서 */}
         <Link
@@ -264,6 +257,16 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
           <Settings className="w-5 h-5" />
           <span className="text-xs mt-1 font-medium">설정</span>
         </Link>
+        
+        {/* 헌금 등록 (중앙 버튼 - 절대 위치) */}
+        <div className="bottom-nav-center">
+          <Link
+            to="/donations/quick"
+            className="bottom-nav-center-button"
+          >
+            <Plus className="w-6 h-6" />
+          </Link>
+        </div>
       </div>
     </nav>
   );

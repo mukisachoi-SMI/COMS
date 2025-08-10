@@ -40,7 +40,7 @@ import {
   Share2,
   Settings
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 interface DashboardEnhancedProps {
   session: ChurchSession;
@@ -198,6 +198,7 @@ const ProgressBar: React.FC<{
 // 메인 대시보드 컴포넌트
 const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [stats, setStats] = useState<DashboardStats>({
     totalMembers: 0,
     monthlyDonation: 0,
@@ -1127,14 +1128,6 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
           </button>
         </div>
       </div>
-
-      {/* 플로팅 액션 버튼 */}
-      <button 
-        onClick={() => navigate('/donations/quick')}
-        className="fixed bottom-24 right-4 z-30 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center group"
-      >
-        <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform" />
-      </button>
 
       {/* 알림 패널 */}
       {showNotifications && (
