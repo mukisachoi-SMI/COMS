@@ -14,6 +14,12 @@
       "type": "image/png"
     },
     {
+      "src": "icons/coms_b-44x44.png",
+      "sizes": "44x44",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icons/coms_b-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
@@ -38,8 +44,20 @@
       "purpose": "any maskable"
     },
     {
+      "src": "icons/coms_b-150x150.png",
+      "sizes": "150x150",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icons/coms_b-152x152.png",
       "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/coms_b-180x180.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -48,6 +66,12 @@
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icons/coms_b-310x310.png",
+      "sizes": "310x310",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/coms_b-384x384.png",
@@ -60,66 +84,6 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
-    },
-    {
-      "src": "icons/coms_d-16x16.png",
-      "sizes": "16x16",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-32x32.png",
-      "sizes": "32x32",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "icons/coms_d-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "monochrome"
     }
   ],
   "start_url": ".",
