@@ -1,5 +1,5 @@
 // Service Worker for Church Donation System PWA
-const CACHE_NAME = 'church-donation-v2';
+const CACHE_NAME = 'church-donation-v3';
 const urlsToCache = [
   '/',
   '/index.html',
