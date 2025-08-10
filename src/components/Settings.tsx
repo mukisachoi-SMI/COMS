@@ -344,10 +344,11 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
   const getDefaultPositionStatuses = () => {
     return [
       { church_id: session.churchId, status_name: '시무', status_code: 'ACTIVE', is_active: true, sort_order: 1 },
-      { church_id: session.churchId, status_name: '은퇴', status_code: 'RETIRED', is_active: true, sort_order: 2 },
-      { church_id: session.churchId, status_name: '협동', status_code: 'ASSOCIATE', is_active: true, sort_order: 3 },
-      { church_id: session.churchId, status_name: '원로', status_code: 'EMERITUS', is_active: true, sort_order: 4 },
-      { church_id: session.churchId, status_name: '직원', status_code: 'STAFF', is_active: true, sort_order: 5 }
+      { church_id: session.churchId, status_name: '청년', status_code: 'YOUNG', is_active: true, sort_order: 2 },
+      { church_id: session.churchId, status_name: '은퇴', status_code: 'RETIRED', is_active: true, sort_order: 3 },
+      { church_id: session.churchId, status_name: '협동', status_code: 'ASSOCIATE', is_active: true, sort_order: 4 },
+      { church_id: session.churchId, status_name: '원로', status_code: 'EMERITUS', is_active: true, sort_order: 5 },
+      { church_id: session.churchId, status_name: '직원', status_code: 'STAFF', is_active: true, sort_order: 6 }
     ];
   };
 
