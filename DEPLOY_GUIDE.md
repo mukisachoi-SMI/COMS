@@ -72,26 +72,33 @@ Netlify 대시보드에서 다음 환경변수를 설정하세요:
 
 ## 📱 PWA 설정 확인
 
-### 아이콘 설정
+### 다크/라이트 모드 아이콘 설정
 1. **아이콘 파일 준비**
-   - 포함된 HTML 아이콘 생성기를 사용하여 모든 크기의 PNG 파일 생성
-   - 다운로드한 파일들을 `/public` 폴더에 저장:
-     - favicon-16x16.png
-     - favicon-32x32.png
-     - icon-72x72.png
-     - icon-96x96.png
-     - icon-128x128.png
-     - icon-144x144.png
-     - icon-152x152.png
-     - logo192.png (기존 파일 교체)
-     - icon-384x384.png
-     - logo512.png (기존 파일 교체)
+   - 원본 아이콘 준비:
+     - `coms_b_original.png` (브라이트 모드용 - 밝은 배경)
+     - `coms_d_original.png` (다크 모드용 - 어두운 배경)
+   
+2. **아이콘 자동 생성**
+   ```bash
+   # Windows에서 실행
+   generate-icons.bat
+   ```
+   
+   생성되는 파일들 (`/public/icons/` 폴더):
+   - 브라이트 모드: coms_b-16x16.png ~ coms_b-512x512.png
+   - 다크 모드: coms_d-16x16.png ~ coms_d-512x512.png
 
-2. **manifest.json 확인**
-   - 모든 아이콘 경로가 올바른지 확인
-   - purpose: "any maskable" 속성 확인
+3. **manifest 파일 확인**
+   - `manifest.json`: 브라이트 모드용 (기본)
+   - `manifest-dark.json`: 다크 모드용
+   - 시스템 테마에 따라 자동 전환
+   - 모든 아이콘 경로가 `/icons/` 폴더를 가리키는지 확인
 
-3. **브라우저 호환성**
+4. **Service Worker 확인**
+   - `service-worker.js`가 모든 아이콘을 캐싱하는지 확인
+   - 테마 변경 메시지 처리 로직 확인
+
+5. **브라우저 호환성**
    - Chrome/Edge: 설치 버튼 표시
    - Safari (iOS): 홈 화면에 추가
    - Samsung Internet: 자동 설치 배너
@@ -99,11 +106,15 @@ Netlify 대시보드에서 다음 환경변수를 설정하세요:
 ### 배포 후 테스트:
 - [ ] PWA 설치 프롬프트 작동
 - [ ] 설치된 앱 아이콘이 올바른 이미지로 표시
+- [ ] **라이트 모드에서 coms_b 아이콘 표시 확인**
+- [ ] **다크 모드에서 coms_d 아이콘 표시 확인**
+- [ ] **시스템 테마 변경 시 아이콘 자동 전환 확인**
 - [ ] 오프라인 모드 테스트
 - [ ] 푸시 알림 (구현 시)
 - [ ] 모바일 반응형 디자인
 - [ ] iOS Safari에서 홈 화면 추가 테스트
 - [ ] Android Chrome에서 설치 테스트
+- [ ] Samsung Internet에서 설치 테스트
 
 ## 🚀 자동 배포 워크플로우
 

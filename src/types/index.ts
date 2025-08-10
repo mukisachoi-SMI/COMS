@@ -12,6 +12,7 @@ export interface Church {
   email: string;
   church_address?: string;
   church_phone?: string;
+  kakao_id?: string;  // 카카오톡 ID 추가
   status: string;
   created_at: string;
   updated_at: string;

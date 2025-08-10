@@ -8,6 +8,16 @@
 - ✅ **헌금 관리**: 헌금 내역 등록/수정/삭제
 - ✅ **직분 관리**: 교인 직분 및 상태 관리
 - ✅ **통계/보고**: 헌금 통계 및 보고서 생성
+- ✅ **교회 정보 관리**: 전화번호, 주소, 카카오톡 ID 등 연락처 관리
+
+## 최신 업데이트 (v2.1)
+
+### 교회 정보 관리 개선 (v2.1)
+- **연락처 필드 추가**:
+  - 전화번호 저장/관리
+  - 교회 주소 저장/관리
+  - 카카오톡 ID (오픈채팅/플러스친구) 저장/관리
+- **Supabase 연동 강화**: 모든 설정 데이터 실시간 저장/불러오기
 
 ## 최신 업데이트 (v2.0)
 
@@ -33,6 +43,7 @@
 - **Backend**: Supabase
 - **Database**: PostgreSQL
 - **Styling**: Tailwind CSS
+- **PWA**: Progressive Web App 지원 (오프라인 지원, 앱 설치 가능)
 
 ## 설치 및 실행
 
@@ -92,6 +103,55 @@ npm run build
 - Supabase Row Level Security (RLS) 적용
 - 교회별 데이터 격리
 - 세션 기반 인증
+
+## PWA 아이콘 설정
+
+### 다크/라이트 모드 아이콘 지원
+시스템 테마에 따라 자동으로 변경되는 PWA 아이콘을 지원합니다.
+
+#### 아이콘 생성
+1. 원본 아이콘 준비:
+   - `coms_b_original.png` (브라이트 모드)
+   - `coms_d_original.png` (다크 모드)
+
+2. 아이콘 생성 실행:
+   ```bash
+   # Windows
+   generate-icons.bat
+   
+   # 또는 npm 스크립트
+   npm run generate-icons
+   ```
+
+3. 빌드 및 테스트:
+   ```bash
+   npm run build:pwa
+   npm run serve:pwa
+   ```
+
+#### PWA 설치
+1. Chrome에서 사이트 접속
+2. 주소창의 설치 아이콘 클릭
+3. "설치" 버튼 클릭
+4. 앱이 설치되면 시스템 테마에 맞는 아이콘이 표시됨
+
+자세한 내용은 `PWA_ICON_GUIDE.md` 참조
+
+## Netlify 배포
+
+```bash
+# 빌드
+npm run build
+
+# Netlify CLI로 배포 (선택사항)
+npx netlify deploy --prod --dir=build
+```
+
+배포 시 다음 파일들이 자동으로 적용됩니다:
+- `netlify.toml`: 빌드 설정 및 헤더 설정
+- `public/manifest.json`: 브라이트 모드 PWA 설정
+- `public/manifest-dark.json`: 다크 모드 PWA 설정
+- `public/service-worker.js`: 오프라인 지원 및 캐싱
 
 ## 라이선스
 MIT License

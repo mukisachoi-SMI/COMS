@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
-// import { supabase } from '../utils/supabase';
+import { supabase } from '../utils/supabase';
 import { 
-
   Church as ChurchIcon, 
   DollarSign, 
   Users, 
@@ -11,7 +10,11 @@ import {
   Plus, 
   Trash2,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  MessageCircle,
+  Phone,
+  MapPin,
+  RefreshCw
 } from 'lucide-react';
 
 interface SettingsProps {
@@ -31,10 +34,11 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
 
   // 교회 정보 상태
   const [churchInfo, setChurchInfo] = useState<Partial<Church>>({
-    church_name: session.churchName,
-    email: session.email,
+    church_name: session.churchName || '',
+    email: session.email || '',
     church_address: '',
-    church_phone: ''
+    church_phone: '',
+    kakao_id: ''
   });
 
   // 헌금 종류 상태
@@ -60,633 +64,617 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
   ];
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        // 기본 헌금 종류
-        const defaultDonationTypes: DonationType[] = [
-          {
-            type_id: 'dt_001',
-            church_id: session.churchId,
-            type_name: '주정헌금',
-            type_code: 'WEEKLY_OFFERING',
-            is_active: true,
-            sort_order: 1,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_002',
-            church_id: session.churchId,
-            type_name: '감사헌금',
-            type_code: 'THANKSGIVING',
-            is_active: true,
-            sort_order: 2,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_003',
-            church_id: session.churchId,
-            type_name: '십일조',
-            type_code: 'TITHE',
-            is_active: true,
-            sort_order: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_004',
-            church_id: session.churchId,
-            type_name: '선교헌금',
-            type_code: 'MISSION',
-            is_active: true,
-            sort_order: 4,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_005',
-            church_id: session.churchId,
-            type_name: '절기헌금',
-            type_code: 'SEASONAL',
-            is_active: true,
-            sort_order: 5,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_006',
-            church_id: session.churchId,
-            type_name: '건축헌금',
-            type_code: 'BUILDING',
-            is_active: true,
-            sort_order: 6,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_007',
-            church_id: session.churchId,
-            type_name: '임직헌금',
-            type_code: 'ORDINATION',
-            is_active: true,
-            sort_order: 7,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_008',
-            church_id: session.churchId,
-            type_name: '장학헌금',
-            type_code: 'SCHOLARSHIP',
-            is_active: true,
-            sort_order: 8,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_009',
-            church_id: session.churchId,
-            type_name: '주일헌금',
-            type_code: 'SUNDAY_OFFERING',
-            is_active: true,
-            sort_order: 9,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            type_id: 'dt_010',
-            church_id: session.churchId,
-            type_name: '목적헌금',
-            type_code: 'PURPOSE_OFFERING',
-            is_active: true,
-            sort_order: 10,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
-        ];
-
-        // 기본 직분 (단순하게)
-        const defaultPositions: Position[] = [
-          {
-            position_id: 'pos_001',
-            church_id: session.churchId,
-            position_name: '목사',
-            position_code: 'PASTOR',
-            is_active: true,
-            sort_order: 1,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_002',
-            church_id: session.churchId,
-            position_name: '부목사',
-            position_code: 'ASSOC_PASTOR',
-            is_active: true,
-            sort_order: 2,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_003',
-            church_id: session.churchId,
-            position_name: '전도사',
-            position_code: 'EVANGELIST',
-            is_active: true,
-            sort_order: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_004',
-            church_id: session.churchId,
-            position_name: '장로',
-            position_code: 'ELDER',
-            is_active: true,
-            sort_order: 4,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_005',
-            church_id: session.churchId,
-            position_name: '권사',
-            position_code: 'DEACONESS',
-            is_active: true,
-            sort_order: 5,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_006',
-            church_id: session.churchId,
-            position_name: '안수집사',
-            position_code: 'ORDAINED_DEACON',
-            is_active: true,
-            sort_order: 6,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_007',
-            church_id: session.churchId,
-            position_name: '집사',
-            position_code: 'DEACON',
-            is_active: true,
-            sort_order: 7,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            position_id: 'pos_008',
-            church_id: session.churchId,
-            position_name: '성도',
-            position_code: 'MEMBER',
-            is_active: true,
-            sort_order: 8,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
-        ];
-
-        // 기본 직분 상태
-        const defaultPositionStatuses: PositionStatus[] = [
-          {
-            status_id: 'st_001',
-            church_id: session.churchId,
-            status_name: '시무',
-            status_code: 'ACTIVE',
-            is_active: true,
-            sort_order: 1,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            status_id: 'st_002',
-            church_id: session.churchId,
-            status_name: '은퇴',
-            status_code: 'RETIRED',
-            is_active: true,
-            sort_order: 2,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            status_id: 'st_003',
-            church_id: session.churchId,
-            status_name: '협동',
-            status_code: 'ASSOCIATE',
-            is_active: true,
-            sort_order: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            status_id: 'st_004',
-            church_id: session.churchId,
-            status_name: '원로',
-            status_code: 'EMERITUS',
-            is_active: true,
-            sort_order: 4,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          {
-            status_id: 'st_005',
-            church_id: session.churchId,
-            status_name: '직원',
-            status_code: 'STAFF',
-            is_active: true,
-            sort_order: 5,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
-        ];
-
-        setDonationTypes(defaultDonationTypes);
-        setPositions(defaultPositions);
-        setPositionStatuses(defaultPositionStatuses);
-
-      } catch (error) {
-        console.error('Failed to load initial data:', error);
-        showMessage('error', '초기 데이터 로드에 실패했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    console.log('Settings mounted with session:', session);
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loadInitialData = async () => {
+  const loadData = async () => {
     setIsLoading(true);
     try {
-      // 기본 헌금 종류
-      const defaultDonationTypes: DonationType[] = [
-        {
-          type_id: 'dt_001',
-          church_id: session.churchId,
-          type_name: '주정헌금',
-          type_code: 'WEEKLY_OFFERING',
-          is_active: true,
-          sort_order: 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_002',
-          church_id: session.churchId,
-          type_name: '감사헌금',
-          type_code: 'THANKSGIVING',
-          is_active: true,
-          sort_order: 2,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_003',
-          church_id: session.churchId,
-          type_name: '십일조',
-          type_code: 'TITHE',
-          is_active: true,
-          sort_order: 3,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_004',
-          church_id: session.churchId,
-          type_name: '선교헌금',
-          type_code: 'MISSION',
-          is_active: true,
-          sort_order: 4,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_005',
-          church_id: session.churchId,
-          type_name: '절기헌금',
-          type_code: 'SEASONAL',
-          is_active: true,
-          sort_order: 5,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_006',
-          church_id: session.churchId,
-          type_name: '건축헌금',
-          type_code: 'BUILDING',
-          is_active: true,
-          sort_order: 6,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_007',
-          church_id: session.churchId,
-          type_name: '임직헌금',
-          type_code: 'ORDINATION',
-          is_active: true,
-          sort_order: 7,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_008',
-          church_id: session.churchId,
-          type_name: '장학헌금',
-          type_code: 'SCHOLARSHIP',
-          is_active: true,
-          sort_order: 8,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_009',
-          church_id: session.churchId,
-          type_name: '주일헌금',
-          type_code: 'SUNDAY_OFFERING',
-          is_active: true,
-          sort_order: 9,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          type_id: 'dt_010',
-          church_id: session.churchId,
-          type_name: '목적헌금',
-          type_code: 'PURPOSE_OFFERING',
-          is_active: true,
-          sort_order: 10,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
-
-      // 기본 직분 (단순하게)
-      const defaultPositions: Position[] = [
-        {
-          position_id: 'pos_001',
-          church_id: session.churchId,
-          position_name: '목사',
-          position_code: 'PASTOR',
-          is_active: true,
-          sort_order: 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_002',
-          church_id: session.churchId,
-          position_name: '부목사',
-          position_code: 'ASSOC_PASTOR',
-          is_active: true,
-          sort_order: 2,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_003',
-          church_id: session.churchId,
-          position_name: '전도사',
-          position_code: 'EVANGELIST',
-          is_active: true,
-          sort_order: 3,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_004',
-          church_id: session.churchId,
-          position_name: '장로',
-          position_code: 'ELDER',
-          is_active: true,
-          sort_order: 4,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_005',
-          church_id: session.churchId,
-          position_name: '권사',
-          position_code: 'DEACONESS',
-          is_active: true,
-          sort_order: 5,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_006',
-          church_id: session.churchId,
-          position_name: '안수집사',
-          position_code: 'ORDAINED_DEACON',
-          is_active: true,
-          sort_order: 6,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_007',
-          church_id: session.churchId,
-          position_name: '집사',
-          position_code: 'DEACON',
-          is_active: true,
-          sort_order: 7,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          position_id: 'pos_008',
-          church_id: session.churchId,
-          position_name: '성도',
-          position_code: 'MEMBER',
-          is_active: true,
-          sort_order: 8,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
-
-      // 기본 직분 상태
-      const defaultPositionStatuses: PositionStatus[] = [
-        {
-          status_id: 'st_001',
-          church_id: session.churchId,
-          status_name: '시무',
-          status_code: 'ACTIVE',
-          is_active: true,
-          sort_order: 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          status_id: 'st_002',
-          church_id: session.churchId,
-          status_name: '은퇴',
-          status_code: 'RETIRED',
-          is_active: true,
-          sort_order: 2,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          status_id: 'st_003',
-          church_id: session.churchId,
-          status_name: '협동',
-          status_code: 'ASSOCIATE',
-          is_active: true,
-          sort_order: 3,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          status_id: 'st_004',
-          church_id: session.churchId,
-          status_name: '원로',
-          status_code: 'EMERITUS',
-          is_active: true,
-          sort_order: 4,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          status_id: 'st_005',
-          church_id: session.churchId,
-          status_name: '직원',
-          status_code: 'STAFF',
-          is_active: true,
-          sort_order: 5,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
-
-      setDonationTypes(defaultDonationTypes);
-      setPositions(defaultPositions);
-      setPositionStatuses(defaultPositionStatuses);
-
+      // 교회 정보 로드
+      await loadChurchInfo();
+      
+      // 헌금 종류 로드
+      await loadDonationTypes();
+      
+      // 직분 정보 로드
+      await loadPositions();
+      
+      // 직분 상태 로드
+      await loadPositionStatuses();
+      
     } catch (error) {
-      console.error('Failed to load initial data:', error);
-      showMessage('error', '초기 데이터 로드에 실패했습니다.');
+      console.error('Failed to load data:', error);
+      showMessage('error', '데이터 로드에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const loadChurchInfo = async () => {
+    try {
+      console.log('Loading church info for:', session.churchId);
+      
+      const { data, error } = await supabase
+        .from('churches')
+        .select('*')
+        .eq('church_id', session.churchId)
+        .single();
+
+      console.log('Church info query result:', { data, error });
+
+      if (error) {
+        console.error('Church info load error:', error);
+        // 에러가 있어도 세션 정보는 유지
+        setChurchInfo(prev => ({
+          ...prev,
+          church_name: session.churchName || prev.church_name,
+          email: session.email || prev.email
+        }));
+        return;
+      }
+
+      if (data) {
+        console.log('Setting church info:', data);
+        setChurchInfo({
+          church_id: data.church_id,
+          church_name: data.church_name || session.churchName,
+          email: data.email || session.email,
+          church_phone: data.church_phone || '',
+          church_address: data.church_address || '',
+          kakao_id: data.kakao_id || ''
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load church info:', error);
+      // 에러가 있어도 세션 정보는 유지
+      setChurchInfo(prev => ({
+        ...prev,
+        church_name: session.churchName || prev.church_name,
+        email: session.email || prev.email
+      }));
+    }
+  };
+
+  const loadDonationTypes = async () => {
+    try {
+      console.log('Loading donation types for:', session.churchId);
+      
+      const { data, error } = await supabase
+        .from('donation_types')
+        .select('*')
+        .eq('church_id', session.churchId)
+        .order('sort_order', { ascending: true });
+
+      console.log('Donation types query result:', { data, error });
+
+      if (error) {
+        console.error('Donation types load error:', error);
+        // 에러 시 기본 데이터 사용
+        setDefaultDonationTypes();
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setDonationTypes(data);
+      } else {
+        // 데이터가 없으면 기본 헌금 종류 생성
+        console.log('No donation types found, creating defaults');
+        await createDefaultDonationTypes();
+      }
+    } catch (error) {
+      console.error('Failed to load donation types:', error);
+      setDefaultDonationTypes();
+    }
+  };
+
+  const loadPositions = async () => {
+    try {
+      console.log('Loading positions for:', session.churchId);
+      
+      const { data, error } = await supabase
+        .from('positions')
+        .select('*')
+        .eq('church_id', session.churchId)
+        .order('sort_order', { ascending: true });
+
+      console.log('Positions query result:', { data, error });
+
+      if (error) {
+        console.error('Positions load error:', error);
+        setDefaultPositions();
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setPositions(data);
+      } else {
+        console.log('No positions found, creating defaults');
+        await createDefaultPositions();
+      }
+    } catch (error) {
+      console.error('Failed to load positions:', error);
+      setDefaultPositions();
+    }
+  };
+
+  const loadPositionStatuses = async () => {
+    try {
+      console.log('Loading position statuses for:', session.churchId);
+      
+      const { data, error } = await supabase
+        .from('position_statuses')
+        .select('*')
+        .eq('church_id', session.churchId)
+        .order('sort_order', { ascending: true });
+
+      console.log('Position statuses query result:', { data, error });
+
+      if (error) {
+        console.error('Position statuses load error:', error);
+        setDefaultPositionStatuses();
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setPositionStatuses(data);
+      } else {
+        console.log('No position statuses found, creating defaults');
+        await createDefaultPositionStatuses();
+      }
+    } catch (error) {
+      console.error('Failed to load position statuses:', error);
+      setDefaultPositionStatuses();
+    }
+  };
+
+  const createDefaultDonationTypes = async () => {
+    const defaultTypes = getDefaultDonationTypes();
+    
+    try {
+      console.log('Creating default donation types:', defaultTypes);
+      
+      const { data, error } = await supabase
+        .from('donation_types')
+        .insert(defaultTypes)
+        .select();
+      
+      console.log('Create donation types result:', { data, error });
+      
+      if (error) {
+        console.error('Create donation types error:', error);
+        setDefaultDonationTypes();
+        return;
+      }
+      
+      if (data) {
+        setDonationTypes(data);
+      }
+    } catch (error) {
+      console.error('Failed to create default donation types:', error);
+      setDefaultDonationTypes();
+    }
+  };
+
+  const createDefaultPositions = async () => {
+    const defaultPositions = getDefaultPositions();
+    
+    try {
+      console.log('Creating default positions:', defaultPositions);
+      
+      const { data, error } = await supabase
+        .from('positions')
+        .insert(defaultPositions)
+        .select();
+      
+      console.log('Create positions result:', { data, error });
+      
+      if (error) {
+        console.error('Create positions error:', error);
+        setDefaultPositions();
+        return;
+      }
+      
+      if (data) {
+        setPositions(data);
+      }
+    } catch (error) {
+      console.error('Failed to create default positions:', error);
+      setDefaultPositions();
+    }
+  };
+
+  const createDefaultPositionStatuses = async () => {
+    const defaultStatuses = getDefaultPositionStatuses();
+    
+    try {
+      console.log('Creating default position statuses:', defaultStatuses);
+      
+      const { data, error } = await supabase
+        .from('position_statuses')
+        .insert(defaultStatuses)
+        .select();
+      
+      console.log('Create position statuses result:', { data, error });
+      
+      if (error) {
+        console.error('Create position statuses error:', error);
+        setDefaultPositionStatuses();
+        return;
+      }
+      
+      if (data) {
+        setPositionStatuses(data);
+      }
+    } catch (error) {
+      console.error('Failed to create default position statuses:', error);
+      setDefaultPositionStatuses();
+    }
+  };
+
+  const getDefaultDonationTypes = () => {
+    return [
+      { church_id: session.churchId, type_name: '주정헌금', type_code: 'WEEKLY_OFFERING', is_active: true, sort_order: 1 },
+      { church_id: session.churchId, type_name: '감사헌금', type_code: 'THANKSGIVING', is_active: true, sort_order: 2 },
+      { church_id: session.churchId, type_name: '십일조', type_code: 'TITHE', is_active: true, sort_order: 3 },
+      { church_id: session.churchId, type_name: '선교헌금', type_code: 'MISSION', is_active: true, sort_order: 4 },
+      { church_id: session.churchId, type_name: '절기헌금', type_code: 'SEASONAL', is_active: true, sort_order: 5 },
+      { church_id: session.churchId, type_name: '건축헌금', type_code: 'BUILDING', is_active: true, sort_order: 6 },
+      { church_id: session.churchId, type_name: '임직헌금', type_code: 'ORDINATION', is_active: true, sort_order: 7 },
+      { church_id: session.churchId, type_name: '장학헌금', type_code: 'SCHOLARSHIP', is_active: true, sort_order: 8 },
+      { church_id: session.churchId, type_name: '주일헌금', type_code: 'SUNDAY_OFFERING', is_active: true, sort_order: 9 },
+      { church_id: session.churchId, type_name: '목적헌금', type_code: 'PURPOSE_OFFERING', is_active: true, sort_order: 10 }
+    ];
+  };
+
+  const getDefaultPositions = () => {
+    return [
+      { church_id: session.churchId, position_name: '목사', position_code: 'PASTOR', is_active: true, sort_order: 1 },
+      { church_id: session.churchId, position_name: '부목사', position_code: 'ASSOC_PASTOR', is_active: true, sort_order: 2 },
+      { church_id: session.churchId, position_name: '전도사', position_code: 'EVANGELIST', is_active: true, sort_order: 3 },
+      { church_id: session.churchId, position_name: '장로', position_code: 'ELDER', is_active: true, sort_order: 4 },
+      { church_id: session.churchId, position_name: '권사', position_code: 'DEACONESS', is_active: true, sort_order: 5 },
+      { church_id: session.churchId, position_name: '안수집사', position_code: 'ORDAINED_DEACON', is_active: true, sort_order: 6 },
+      { church_id: session.churchId, position_name: '집사', position_code: 'DEACON', is_active: true, sort_order: 7 },
+      { church_id: session.churchId, position_name: '성도', position_code: 'MEMBER', is_active: true, sort_order: 8 }
+    ];
+  };
+
+  const getDefaultPositionStatuses = () => {
+    return [
+      { church_id: session.churchId, status_name: '시무', status_code: 'ACTIVE', is_active: true, sort_order: 1 },
+      { church_id: session.churchId, status_name: '은퇴', status_code: 'RETIRED', is_active: true, sort_order: 2 },
+      { church_id: session.churchId, status_name: '협동', status_code: 'ASSOCIATE', is_active: true, sort_order: 3 },
+      { church_id: session.churchId, status_name: '원로', status_code: 'EMERITUS', is_active: true, sort_order: 4 },
+      { church_id: session.churchId, status_name: '직원', status_code: 'STAFF', is_active: true, sort_order: 5 }
+    ];
+  };
+
+  const setDefaultDonationTypes = () => {
+    const types = getDefaultDonationTypes().map((type, index) => ({
+      ...type,
+      type_id: `dt_local_${Date.now()}_${index}`,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }));
+    setDonationTypes(types);
+  };
+
+  const setDefaultPositions = () => {
+    const positions = getDefaultPositions().map((pos, index) => ({
+      ...pos,
+      position_id: `pos_local_${Date.now()}_${index}`,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }));
+    setPositions(positions);
+  };
+
+  const setDefaultPositionStatuses = () => {
+    const statuses = getDefaultPositionStatuses().map((status, index) => ({
+      ...status,
+      status_id: `st_local_${Date.now()}_${index}`,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }));
+    setPositionStatuses(statuses);
+  };
+
   const showMessage = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text });
-    setTimeout(() => setMessage(null), 3000);
+    setTimeout(() => setMessage(null), 5000);
   };
 
   const saveChurchInfo = async () => {
     setIsLoading(true);
     try {
       console.log('Saving church info:', churchInfo);
-      // 실제로는 localStorage나 API에 저장
+      
+      const updateData = {
+        church_name: churchInfo.church_name,
+        email: churchInfo.email,
+        church_phone: churchInfo.church_phone || null,
+        church_address: churchInfo.church_address || null,
+        kakao_id: churchInfo.kakao_id || null,
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('Update data:', updateData);
+
+      const { data, error } = await supabase
+        .from('churches')
+        .update(updateData)
+        .eq('church_id', session.churchId)
+        .select();
+
+      console.log('Update result:', { data, error });
+
+      if (error) {
+        console.error('Update error:', error);
+        throw error;
+      }
+
       showMessage('success', '교회 정보가 저장되었습니다.');
-    } catch (error) {
+      
+      // 저장 후 다시 로드
+      await loadChurchInfo();
+    } catch (error: any) {
       console.error('Failed to save church info:', error);
-      showMessage('error', '교회 정보 저장에 실패했습니다.');
+      showMessage('error', `교회 정보 저장 실패: ${error.message || '알 수 없는 오류'}`);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const addDonationType = () => {
+  const addDonationType = async () => {
     if (!newDonationType.type_name.trim()) {
       showMessage('error', '헌금 종류명을 입력해주세요.');
       return;
     }
 
-    const donationType: DonationType = {
-      type_id: `dt_${Date.now()}`,
-      church_id: session.churchId,
-      type_name: newDonationType.type_name.trim(),
-      type_code: newDonationType.type_code.trim() || newDonationType.type_name.toUpperCase(),
-      is_active: true,
-      sort_order: donationTypes.length + 1,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    setIsLoading(true);
+    try {
+      const insertData = {
+        church_id: session.churchId,
+        type_name: newDonationType.type_name.trim(),
+        type_code: newDonationType.type_code.trim() || 
+                   newDonationType.type_name.trim().toUpperCase().replace(/\s+/g, '_'),
+        is_active: true,
+        sort_order: donationTypes.length + 1
+      };
 
-    setDonationTypes([...donationTypes, donationType]);
-    setNewDonationType({ type_name: '', type_code: '' });
-    showMessage('success', '헌금 종류가 추가되었습니다.');
-  };
+      console.log('Inserting donation type:', insertData);
 
-  const removeDonationType = (typeId: string) => {
-    if (window.confirm('이 헌금 종류를 삭제하시겠습니까?')) {
-      setDonationTypes(donationTypes.filter(type => type.type_id !== typeId));
-      showMessage('success', '헌금 종류가 삭제되었습니다.');
+      const { data, error } = await supabase
+        .from('donation_types')
+        .insert(insertData)
+        .select()
+        .single();
+
+      console.log('Insert result:', { data, error });
+
+      if (error) {
+        console.error('Insert error:', error);
+        throw error;
+      }
+
+      if (data) {
+        setDonationTypes([...donationTypes, data]);
+        setNewDonationType({ type_name: '', type_code: '' });
+        showMessage('success', '헌금 종류가 추가되었습니다.');
+      }
+    } catch (error: any) {
+      console.error('Failed to add donation type:', error);
+      showMessage('error', `헌금 종류 추가 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const addPosition = () => {
+  const removeDonationType = async (typeId: string) => {
+    // 로컬 데이터인 경우
+    if (typeId.startsWith('dt_local_')) {
+      setDonationTypes(donationTypes.filter(type => type.type_id !== typeId));
+      showMessage('success', '헌금 종류가 삭제되었습니다.');
+      return;
+    }
+
+    if (!window.confirm('이 헌금 종류를 삭제하시겠습니까?\n관련된 헌금 기록이 있다면 삭제할 수 없습니다.')) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('donation_types')
+        .delete()
+        .eq('type_id', typeId)
+        .eq('church_id', session.churchId);
+
+      if (error) {
+        console.error('Delete error:', error);
+        throw error;
+      }
+
+      setDonationTypes(donationTypes.filter(type => type.type_id !== typeId));
+      showMessage('success', '헌금 종류가 삭제되었습니다.');
+    } catch (error: any) {
+      console.error('Failed to remove donation type:', error);
+      showMessage('error', `헌금 종류 삭제 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addPosition = async () => {
     if (!newPosition.position_name.trim()) {
       showMessage('error', '직분명을 입력해주세요.');
       return;
     }
 
-    const position: Position = {
-      position_id: `pos_${Date.now()}`,
-      church_id: session.churchId,
-      position_name: newPosition.position_name.trim(),
-      position_code: newPosition.position_code.trim() || newPosition.position_name.toUpperCase(),
-      is_active: true,
-      sort_order: positions.length + 1,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    setIsLoading(true);
+    try {
+      const insertData = {
+        church_id: session.churchId,
+        position_name: newPosition.position_name.trim(),
+        position_code: newPosition.position_code.trim() || 
+                      newPosition.position_name.trim().toUpperCase().replace(/\s+/g, '_'),
+        is_active: true,
+        sort_order: positions.length + 1
+      };
 
-    setPositions([...positions, position]);
-    setNewPosition({ position_name: '', position_code: '' });
-    showMessage('success', '직분이 추가되었습니다.');
-  };
+      console.log('Inserting position:', insertData);
 
-  const removePosition = (positionId: string) => {
-    if (window.confirm('이 직분을 삭제하시겠습니까?')) {
-      setPositions(positions.filter(pos => pos.position_id !== positionId));
-      showMessage('success', '직분이 삭제되었습니다.');
+      const { data, error } = await supabase
+        .from('positions')
+        .insert(insertData)
+        .select()
+        .single();
+
+      console.log('Insert result:', { data, error });
+
+      if (error) {
+        console.error('Insert error:', error);
+        throw error;
+      }
+
+      if (data) {
+        setPositions([...positions, data]);
+        setNewPosition({ position_name: '', position_code: '' });
+        showMessage('success', '직분이 추가되었습니다.');
+      }
+    } catch (error: any) {
+      console.error('Failed to add position:', error);
+      showMessage('error', `직분 추가 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const addPositionStatus = () => {
+  const removePosition = async (positionId: string) => {
+    // 로컬 데이터인 경우
+    if (positionId.startsWith('pos_local_')) {
+      setPositions(positions.filter(pos => pos.position_id !== positionId));
+      showMessage('success', '직분이 삭제되었습니다.');
+      return;
+    }
+
+    if (!window.confirm('이 직분을 삭제하시겠습니까?\n관련된 교인 정보가 있다면 삭제할 수 없습니다.')) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('positions')
+        .delete()
+        .eq('position_id', positionId)
+        .eq('church_id', session.churchId);
+
+      if (error) {
+        console.error('Delete error:', error);
+        throw error;
+      }
+
+      setPositions(positions.filter(pos => pos.position_id !== positionId));
+      showMessage('success', '직분이 삭제되었습니다.');
+    } catch (error: any) {
+      console.error('Failed to remove position:', error);
+      showMessage('error', `직분 삭제 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addPositionStatus = async () => {
     if (!newPositionStatus.status_name.trim()) {
       showMessage('error', '직분 상태명을 입력해주세요.');
       return;
     }
 
-    const status: PositionStatus = {
-      status_id: `st_${Date.now()}`,
-      church_id: session.churchId,
-      status_name: newPositionStatus.status_name.trim(),
-      status_code: newPositionStatus.status_code.trim() || newPositionStatus.status_name.toUpperCase(),
-      is_active: true,
-      sort_order: positionStatuses.length + 1,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    setIsLoading(true);
+    try {
+      const insertData = {
+        church_id: session.churchId,
+        status_name: newPositionStatus.status_name.trim(),
+        status_code: newPositionStatus.status_code.trim() || 
+                    newPositionStatus.status_name.trim().toUpperCase().replace(/\s+/g, '_'),
+        is_active: true,
+        sort_order: positionStatuses.length + 1
+      };
 
-    setPositionStatuses([...positionStatuses, status]);
-    setNewPositionStatus({ status_name: '', status_code: '' });
-    showMessage('success', '직분 상태가 추가되었습니다.');
+      console.log('Inserting position status:', insertData);
+
+      const { data, error } = await supabase
+        .from('position_statuses')
+        .insert(insertData)
+        .select()
+        .single();
+
+      console.log('Insert result:', { data, error });
+
+      if (error) {
+        console.error('Insert error:', error);
+        throw error;
+      }
+
+      if (data) {
+        setPositionStatuses([...positionStatuses, data]);
+        setNewPositionStatus({ status_name: '', status_code: '' });
+        showMessage('success', '직분 상태가 추가되었습니다.');
+      }
+    } catch (error: any) {
+      console.error('Failed to add position status:', error);
+      showMessage('error', `직분 상태 추가 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const removePositionStatus = (statusId: string) => {
-    if (window.confirm('이 직분 상태를 삭제하시겠습니까?')) {
+  const removePositionStatus = async (statusId: string) => {
+    // 로컬 데이터인 경우
+    if (statusId.startsWith('st_local_')) {
       setPositionStatuses(positionStatuses.filter(status => status.status_id !== statusId));
       showMessage('success', '직분 상태가 삭제되었습니다.');
+      return;
+    }
+
+    if (!window.confirm('이 직분 상태를 삭제하시겠습니까?\n관련된 교인 정보가 있다면 삭제할 수 없습니다.')) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('position_statuses')
+        .delete()
+        .eq('status_id', statusId)
+        .eq('church_id', session.churchId);
+
+      if (error) {
+        console.error('Delete error:', error);
+        throw error;
+      }
+
+      setPositionStatuses(positionStatuses.filter(status => status.status_id !== statusId));
+      showMessage('success', '직분 상태가 삭제되었습니다.');
+    } catch (error: any) {
+      console.error('Failed to remove position status:', error);
+      showMessage('error', `직분 상태 삭제 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const renderChurchInfo = () => (
     <div className="space-y-6">
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">교회 기본 정보</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium text-gray-900">교회 기본 정보</h3>
+          <button
+            onClick={loadChurchInfo}
+            disabled={isLoading}
+            className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+            title="새로고침"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -717,6 +705,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Phone className="w-4 h-4 inline mr-1" />
               전화번호
             </label>
             <input
@@ -724,12 +713,27 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
               value={churchInfo.church_phone || ''}
               onChange={(e) => setChurchInfo({...churchInfo, church_phone: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="전화번호를 입력하세요"
+              placeholder="예: 02-1234-5678"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <MessageCircle className="w-4 h-4 inline mr-1" />
+              카카오톡 ID
+            </label>
+            <input
+              type="text"
+              value={churchInfo.kakao_id || ''}
+              onChange={(e) => setChurchInfo({...churchInfo, kakao_id: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              placeholder="카카오톡 오픈채팅 또는 플러스친구 ID"
             />
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              <MapPin className="w-4 h-4 inline mr-1" />
               주소
             </label>
             <input
@@ -749,8 +753,27 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
             className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 flex items-center"
           >
             <Save className="w-4 h-4 mr-2" />
-            저장
+            {isLoading ? '저장 중...' : '저장'}
           </button>
+        </div>
+      </div>
+
+      {/* 교회 정보 표시 카드 */}
+      <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+        <h4 className="text-sm font-medium text-blue-900 mb-3">저장된 교회 정보</h4>
+        <div className="space-y-2 text-sm text-blue-800">
+          {churchInfo.church_phone && (
+            <p><Phone className="w-4 h-4 inline mr-2" />전화: {churchInfo.church_phone}</p>
+          )}
+          {churchInfo.kakao_id && (
+            <p><MessageCircle className="w-4 h-4 inline mr-2" />카카오톡: {churchInfo.kakao_id}</p>
+          )}
+          {churchInfo.church_address && (
+            <p><MapPin className="w-4 h-4 inline mr-2" />주소: {churchInfo.church_address}</p>
+          )}
+          {!churchInfo.church_phone && !churchInfo.kakao_id && !churchInfo.church_address && (
+            <p className="text-gray-500">추가 정보를 입력해주세요.</p>
+          )}
         </div>
       </div>
     </div>
@@ -765,7 +788,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              직분 상태명
+              직분 상태명 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -785,14 +808,15 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
               value={newPositionStatus.status_code}
               onChange={(e) => setNewPositionStatus({...newPositionStatus, status_code: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="예: TEMPORARY"
+              placeholder="예: TEMPORARY (자동생성)"
             />
           </div>
         </div>
 
         <button
           onClick={addPositionStatus}
-          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center"
+          disabled={isLoading}
+          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center disabled:opacity-50"
         >
           <Plus className="w-4 h-4 mr-2" />
           추가
@@ -842,13 +866,21 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => removePositionStatus(status.status_id)}
-                      className="text-red-600 hover:text-red-900"
+                      disabled={isLoading}
+                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
                 </tr>
               ))}
+              {positionStatuses.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    직분 상태가 없습니다.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -865,7 +897,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              헌금 종류명
+              헌금 종류명 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -885,14 +917,15 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
               value={newDonationType.type_code}
               onChange={(e) => setNewDonationType({...newDonationType, type_code: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="예: SPECIAL"
+              placeholder="예: SPECIAL (자동생성)"
             />
           </div>
         </div>
 
         <button
           onClick={addDonationType}
-          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center"
+          disabled={isLoading}
+          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center disabled:opacity-50"
         >
           <Plus className="w-4 h-4 mr-2" />
           추가
@@ -942,13 +975,21 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => removeDonationType(type.type_id)}
-                      className="text-red-600 hover:text-red-900"
+                      disabled={isLoading}
+                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
                 </tr>
               ))}
+              {donationTypes.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    헌금 종류가 없습니다.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -965,7 +1006,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              직분명
+              직분명 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -985,14 +1026,15 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
               value={newPosition.position_code}
               onChange={(e) => setNewPosition({...newPosition, position_code: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="예: ASSOC_PASTOR"
+              placeholder="예: COOP_PASTOR (자동생성)"
             />
           </div>
         </div>
 
         <button
           onClick={addPosition}
-          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center"
+          disabled={isLoading}
+          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center disabled:opacity-50"
         >
           <Plus className="w-4 h-4 mr-2" />
           추가
@@ -1042,13 +1084,21 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => removePosition(position.position_id)}
-                      className="text-red-600 hover:text-red-900"
+                      disabled={isLoading}
+                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
                 </tr>
               ))}
+              {positions.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    직분이 없습니다.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -1102,7 +1152,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       </div>
 
       {/* 탭 콘텐츠 */}
-      {isLoading ? (
+      {isLoading && activeTab === 'church' ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="spinner mx-auto mb-4"></div>
