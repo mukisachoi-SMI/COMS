@@ -94,21 +94,20 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
 
   const loadChurchInfo = async () => {
     try {
-      console.log('Loading church info for:', session.churchId);
+      console.log('Loading church info for church_id:', session.churchId);
       
-      // 특정 필드만 명시적으로 선택
+      // churches 테이블에서 데이터 가져오기
       const { data, error } = await supabase
         .from('churches')
-        .select('church_id, church_name, email, church_phone, church_address, kakao_id')
+        .select('*')  // 모든 필드 가져오기
         .eq('church_id', session.churchId)
         .single();
 
-      console.log('Church info query result:', { data, error });
-      console.log('Raw data fields:', data ? Object.keys(data) : 'No data');
+      console.log('Supabase query result:', { data, error });
 
       if (error) {
-        console.error('Church info load error:', error);
-        // 데이터베이스에서 가져오지 못했을 때 세션 정보만 사용
+        console.error('Error loading church info:', error);
+        // 에러 시 기본값 설정
         setChurchInfo({
           church_id: session.churchId,
           church_name: session.churchName || '',
@@ -117,52 +116,24 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
           church_address: '',
           kakao_id: ''
         });
-        
-        // 테이블 구조 확인을 위한 추가 쿼리
-        const { data: testData, error: testError } = await supabase
-          .from('churches')
-          .select('*')
-          .limit(1);
-        
-        if (testData && testData.length > 0) {
-          console.log('Available columns in churches table:', Object.keys(testData[0]));
-        }
+        showMessage('error', '교회 정보를 불러올 수 없습니다.');
         return;
       }
 
       if (data) {
-        console.log('Setting church info with data:', {
-          church_id: data.church_id,
-          church_name: data.church_name,
-          email: data.email,
-          church_phone: data.church_phone,
-          church_address: data.church_address,
-          kakao_id: data.kakao_id
-        });
-        
+        console.log('Church data loaded successfully:', data);
+        // 데이터 설정
         setChurchInfo({
-          church_id: data.church_id || session.churchId,
-          church_name: data.church_name || session.churchName || '',
-          email: data.email || session.email || '',
+          church_id: data.church_id,
+          church_name: data.church_name || '',
+          email: data.email || '',
           church_phone: data.church_phone || '',
           church_address: data.church_address || '',
           kakao_id: data.kakao_id || ''
         });
-      } else {
-        // 데이터가 없으면 기본값 설정
-        console.log('No church data found, using defaults');
-        setChurchInfo({
-          church_id: session.churchId,
-          church_name: session.churchName || '',
-          email: session.email || '',
-          church_phone: '',
-          church_address: '',
-          kakao_id: ''
-        });
       }
     } catch (error) {
-      console.error('Failed to load church info:', error);
-      // 에러가 있어도 세션 정보는 유지
+      console.error('Exception in loadChurchInfo:', error);
       setChurchInfo({
         church_id: session.churchId,
         church_name: session.churchName || '',
@@ -171,6 +142,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
         church_address: '',
         kakao_id: ''
       });
+      showMessage('error', '교회 정보 로드 중 오류가 발생했습니다.');
     }
   };
 
@@ -429,19 +401,9 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     setIsLoading(true);
     try {
       console.log('Saving church info:', churchInfo);
+      console.log('Church ID:', session.churchId);
       
-      // 먼저 교회 데이터가 존재하는지 확인
-      const { data: existingData, error: checkError } = await supabase
-        .from('churches')
-        .select('church_id')
-        .eq('church_id', session.churchId)
-        .single();
-
-      if (checkError) {
-        console.error('Check error:', checkError);
-        throw new Error('교회 정보를 확인할 수 없습니다.');
-      }
-
+      // 업데이트할 데이터 준비
       const updateData = {
         church_name: churchInfo.church_name || session.churchName,
         email: churchInfo.email || session.email,
@@ -451,53 +413,37 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
         updated_at: new Date().toISOString()
       };
 
-      console.log('Update data:', updateData);
-      console.log('Updating church_id:', session.churchId);
+      console.log('Updating with data:', updateData);
 
+      // Supabase에 업데이트
       const { data, error } = await supabase
         .from('churches')
         .update(updateData)
         .eq('church_id', session.churchId)
-        .select('church_id, church_name, email, church_phone, church_address, kakao_id');
+        .select();
 
-      console.log('Update result:', { data, error });
+      console.log('Supabase update result:', { data, error });
 
       if (error) {
-        console.error('Update error details:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
-        
-        // 필드가 없을 경우를 대비한 에러 처리
-        if (error.message.includes('column')) {
-          throw new Error('데이터베이스 스키마가 최신이 아닙니다. database_church_info_update.sql을 실행해주세요.');
+        console.error('Update error:', error);
+        // 필드가 없다는 에러인 경우 사용자에게 안내
+        if (error.message && error.message.includes('column')) {
+          showMessage('error', 'DB에 필드가 없습니다. SQL 스크립트를 실행해주세요.');
+        } else {
+          showMessage('error', `저장 실패: ${error.message}`);
         }
-        throw error;
+        return;
       }
 
-      if (data && data.length > 0) {
-        console.log('Successfully saved:', data[0]);
-        showMessage('success', '교회 정보가 저장되었습니다.');
-        
-        // 저장된 데이터로 상태 업데이트
-        setChurchInfo({
-          church_id: data[0].church_id,
-          church_name: data[0].church_name || '',
-          email: data[0].email || '',
-          church_phone: data[0].church_phone || '',
-          church_address: data[0].church_address || '',
-          kakao_id: data[0].kakao_id || ''
-        });
-      } else {
-        showMessage('success', '교회 정보가 저장되었습니다.');
-        // 저장 후 다시 로드
-        await loadChurchInfo();
-      }
+      // 성공적으로 저장됨
+      showMessage('success', '교회 정보가 저장되었습니다.');
+      
+      // 저장 후 다시 로드하여 화면 업데이트
+      await loadChurchInfo();
+      
     } catch (error: any) {
-      console.error('Failed to save church info:', error);
-      showMessage('error', `교회 정보 저장 실패: ${error.message || '알 수 없는 오류'}`);
+      console.error('Exception in saveChurchInfo:', error);
+      showMessage('error', `저장 중 오류: ${error.message || '알 수 없는 오류'}`);
     } finally {
       setIsLoading(false);
     }
@@ -737,126 +683,244 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     }
   };
 
-  const renderChurchInfo = () => (
-    <div className="space-y-6">
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-900">교회 기본 정보</h3>
-          <button
-            onClick={loadChurchInfo}
-            disabled={isLoading}
-            className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
-            title="새로고침"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
+  const renderChurchInfo = () => {
+    console.log('Rendering church info with data:', churchInfo);
+    
+    return (
+      <div className="space-y-6">
+        {/* 교회 기본 정보 입력 폼 */}
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-medium text-gray-900">교회 기본 정보</h3>
+            <button
+              onClick={loadChurchInfo}
+              disabled={isLoading}
+              className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 transition-colors"
+              title="새로고침"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            {/* 교회명 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                교회명
+              </label>
+              <input
+                type="text"
+                value={churchInfo.church_name || ''}
+                onChange={(e) => setChurchInfo(prev => ({...prev, church_name: e.target.value}))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="교회명을 입력하세요"
+              />
+            </div>
+
+            {/* 이메일 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                이메일
+              </label>
+              <input
+                type="email"
+                value={churchInfo.email || ''}
+                onChange={(e) => setChurchInfo(prev => ({...prev, email: e.target.value}))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="이메일을 입력하세요"
+              />
+            </div>
+
+            {/* 전화번호 - 새로 추가 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                전화번호
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                <input
+                  type="tel"
+                  value={churchInfo.church_phone || ''}
+                  onChange={(e) => setChurchInfo(prev => ({...prev, church_phone: e.target.value}))}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="예: 02-1234-5678"
+                />
+              </div>
+            </div>
+
+            {/* 카카오톡 ID - 새로 추가 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                카카오톡 ID
+              </label>
+              <div className="relative">
+                <MessageCircle className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={churchInfo.kakao_id || ''}
+                  onChange={(e) => setChurchInfo(prev => ({...prev, kakao_id: e.target.value}))}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="카카오톡 오픈채팅 또는 플러스친구 ID"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                오픈채팅방 ID 또는 카카오톡 채널 ID를 입력하세요
+              </p>
+            </div>
+
+            {/* 주소 - 새로 추가 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                주소
+              </label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={churchInfo.church_address || ''}
+                  onChange={(e) => setChurchInfo(prev => ({...prev, church_address: e.target.value}))}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="교회 주소를 입력하세요"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* 저장 버튼 */}
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={saveChurchInfo}
+              disabled={isLoading}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center transition-colors"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {isLoading ? '저장 중...' : '저장'}
+            </button>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              교회명
-            </label>
-            <input
-              type="text"
-              value={churchInfo.church_name || ''}
-              onChange={(e) => setChurchInfo({...churchInfo, church_name: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="교회명을 입력하세요"
-            />
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              이메일
-            </label>
-            <input
-              type="email"
-              value={churchInfo.email || ''}
-              onChange={(e) => setChurchInfo({...churchInfo, email: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="이메일을 입력하세요"
-            />
+        {/* 저장된 교회 정보 표시 카드 */}
+        {(churchInfo.church_phone || churchInfo.kakao_id || churchInfo.church_address) && (
+          <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h4 className="text-sm font-semibold text-blue-900 mb-4">저장된 교회 연락처 정보</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {churchInfo.church_phone && (
+                <div className="flex items-start">
+                  <Phone className="w-4 h-4 text-blue-600 mr-2 mt-0.5" />
+                  <div>
+                    <span className="text-xs text-blue-600 font-medium">전화번호</span>
+                    <p className="text-sm text-blue-900">{churchInfo.church_phone}</p>
+                  </div>
+                </div>
+              )}
+              {churchInfo.kakao_id && (
+                <div className="flex items-start">
+                  <MessageCircle className="w-4 h-4 text-blue-600 mr-2 mt-0.5" />
+                  <div>
+                    <span className="text-xs text-blue-600 font-medium">카카오톡</span>
+                    <p className="text-sm text-blue-900">{churchInfo.kakao_id}</p>
+                  </div>
+                </div>
+              )}
+              {churchInfo.church_address && (
+                <div className="flex items-start md:col-span-2">
+                  <MapPin className="w-4 h-4 text-blue-600 mr-2 mt-0.5" />
+                  <div>
+                    <span className="text-xs text-blue-600 font-medium">주소</span>
+                    <p className="text-sm text-blue-900">{churchInfo.church_address}</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <Phone className="w-4 h-4 inline mr-1" />
-              전화번호
-            </label>
-            <input
-              type="tel"
-              value={churchInfo.church_phone || ''}
-              onChange={(e) => setChurchInfo({...churchInfo, church_phone: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="예: 02-1234-5678"
-            />
+        {/* 데이터가 없을 때 안내 메시지 */}
+        {!churchInfo.church_phone && !churchInfo.kakao_id && !churchInfo.church_address && (
+          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <div className="text-center">
+              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <h4 className="text-sm font-medium text-gray-900 mb-1">연락처 정보를 입력해주세요</h4>
+              <p className="text-xs text-gray-500">
+                교회 전화번호, 카카오톡 ID, 주소 등을 입력하여 교인들과 소통하세요.
+              </p>
+            </div>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <MessageCircle className="w-4 h-4 inline mr-1" />
-              카카오톡 ID
-            </label>
-            <input
-              type="text"
-              value={churchInfo.kakao_id || ''}
-              onChange={(e) => setChurchInfo({...churchInfo, kakao_id: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="카카오톡 오픈채팅 또는 플러스친구 ID"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <MapPin className="w-4 h-4 inline mr-1" />
-              주소
-            </label>
-            <input
-              type="text"
-              value={churchInfo.church_address || ''}
-              onChange={(e) => setChurchInfo({...churchInfo, church_address: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="교회 주소를 입력하세요"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={saveChurchInfo}
-            disabled={isLoading}
-            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 flex items-center"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            {isLoading ? '저장 중...' : '저장'}
-          </button>
-        </div>
+        )}
       </div>
+    );
+  };
 
-      {/* 교회 정보 표시 카드 */}
-      <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-        <h4 className="text-sm font-medium text-blue-900 mb-3">저장된 교회 정보</h4>
-        <div className="space-y-2 text-sm text-blue-800">
-          {churchInfo.church_phone && (
-            <p><Phone className="w-4 h-4 inline mr-2" />전화: {churchInfo.church_phone}</p>
-          )}
-          {churchInfo.kakao_id && (
-            <p><MessageCircle className="w-4 h-4 inline mr-2" />카카오톡: {churchInfo.kakao_id}</p>
-          )}
-          {churchInfo.church_address && (
-            <p><MapPin className="w-4 h-4 inline mr-2" />주소: {churchInfo.church_address}</p>
-          )}
-          {!churchInfo.church_phone && !churchInfo.kakao_id && !churchInfo.church_address && (
-            <p className="text-gray-500">추가 정보를 입력해주세요.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  // 직분 상태 순서 수정 함수
+  const fixPositionStatusOrder = async () => {
+    setIsLoading(true);
+    try {
+      // 청년 상태 추가 (없으면)
+      const hasYoung = positionStatuses.some(s => s.status_code === 'YOUNG');
+      if (!hasYoung) {
+        await supabase
+          .from('position_statuses')
+          .insert({
+            church_id: session.churchId,
+            status_name: '청년',
+            status_code: 'YOUNG',
+            is_active: true,
+            sort_order: 2
+          });
+      }
+
+      // 순서 업데이트
+      const updates = [
+        { code: 'ACTIVE', order: 1 },
+        { code: 'YOUNG', order: 2 },
+        { code: 'RETIRED', order: 3 },
+        { code: 'ASSOCIATE', order: 4 },
+        { code: 'EMERITUS', order: 5 },
+        { code: 'STAFF', order: 6 }
+      ];
+
+      for (const update of updates) {
+        await supabase
+          .from('position_statuses')
+          .update({ sort_order: update.order })
+          .eq('church_id', session.churchId)
+          .eq('status_code', update.code);
+      }
+
+      // 다시 로드
+      await loadPositionStatuses();
+      showMessage('success', '직분 상태 순서가 수정되었습니다.');
+    } catch (error: any) {
+      console.error('Failed to fix position status order:', error);
+      showMessage('error', `순서 수정 실패: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const renderPositionStatuses = () => (
     <div className="space-y-6">
+      {/* 순서 수정 버튼 */}
+      {/* {positionStatuses.length > 0 && (
+        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="text-sm font-medium text-yellow-900">직분 상태 순서 확인</h4>
+              <p className="text-xs text-yellow-700 mt-1">
+                올바른 순서: 시무 → 청년 → 은퇴 → 협동 → 원로 → 직원
+              </p>
+            </div>
+            <button
+              onClick={fixPositionStatusOrder}
+              disabled={isLoading}
+              className="px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 disabled:opacity-50"
+            >
+              순서 자동 정렬
+            </button>
+          </div>
+        </div>
+      )} */}
+
       {/* 새 직분 상태 추가 */}
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-lg font-medium text-gray-900 mb-4">직분 상태 추가</h3>
