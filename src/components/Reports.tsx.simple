@@ -159,8 +159,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       setFilters(prev => ({
         ...prev,
         startDate: `${selectedYear}-01-01`,
-        endDate: `${selectedYear}-12-31`,
-        donationTypeId: '' // 기부금 영수증은 전체 헌금 집계
+        endDate: `${selectedYear}-12-31`
       }));
     }
   }, [selectedYear, filters.reportType]);
@@ -240,8 +239,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         query = query.eq('member_id', filters.memberId);
       }
 
-      // 기부금 영수증은 전체 헌금을 집계하므로 헌금종류 필터를 사용하지 않음
-      if (filters.donationTypeId && filters.reportType !== 'donation_receipt') {
+      if (filters.donationTypeId) {
         query = query.eq('donation_type_id', filters.donationTypeId);
       }
 
@@ -283,7 +281,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
           phone: donation.members?.phone,
           address: donation.members?.address,
           totalAmount: 0,
-          period: `${selectedYear}년 1월 1일 ~ ${selectedYear}년 12월 31일`,
+          period: `${selectedYear}년`,
           donations: [],
           donationCount: 0
         });
@@ -298,7 +296,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
     return Array.from(memberMap.values()).sort((a, b) => b.totalAmount - a.totalAmount);
   };
 
-  // 교인별 상세 보고서 처리 (개선된 버전)
+  // 교인별 상세 보고서 처리 (유지)
   const processMemberDetailReport = async (data: any[]): Promise<MemberReportData[]> => {
     const memberMap = new Map<string, MemberReportData>();
     
@@ -648,7 +646,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
     return new Date(dateString).toLocaleDateString('ko-KR');
   };
 
-  // 교인별 개인 보고서 출력
+  // 교인별 개인 보고서 출력 (유지)
   const printMemberReport = (member: MemberReportData) => {
     const printWindow = window.open('', '', 'width=800,height=1000');
     if (!printWindow) return;
@@ -990,6 +988,10 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
             <td class="label">기부 기간</td>
             <td>${receipt.period}</td>
           </tr>
+          <tr>
+            <td class="label">기부 건수</td>
+            <td>${receipt.donationCount}건</td>
+          </tr>
         </table>
         
         <div class="amount-box">
@@ -1095,57 +1097,17 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         )}
         
         {filters.reportType === 'monthly' && (
-          <>
-            <div className="mb-4 p-4 bg-green-50 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                조회할 연월 선택
-              </label>
-              <input
-                type="month"
-                value={filters.selectedMonth}
-                onChange={(e) => setFilters({...filters, selectedMonth: e.target.value})}
-                className="input max-w-xs"
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  특정 교인 선택 (선택사항)
-                </label>
-                <select
-                  value={filters.memberId}
-                  onChange={(e) => setFilters({...filters, memberId: e.target.value})}
-                  className="input"
-                >
-                  <option value="">전체 교인</option>
-                  {members.map(member => (
-                    <option key={member.member_id} value={member.member_id}>
-                      {member.member_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  헌금 종류 (선택사항)
-                </label>
-                <select
-                  value={filters.donationTypeId}
-                  onChange={(e) => setFilters({...filters, donationTypeId: e.target.value})}
-                  className="input"
-                >
-                  <option value="">전체</option>
-                  {donationTypes.map(type => (
-                    <option key={type.type_id} value={type.type_id}>
-                      {type.type_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </>
+          <div className="mb-4 p-4 bg-green-50 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              조회할 연월 선택
+            </label>
+            <input
+              type="month"
+              value={filters.selectedMonth}
+              onChange={(e) => setFilters({...filters, selectedMonth: e.target.value})}
+              className="input max-w-xs"
+            />
+          </div>
         )}
         
         {filters.reportType === 'donation_receipt' && (
@@ -1198,48 +1160,45 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
           </div>
         )}
         
-        {/* 교인별 보고서와 헌금종류별 보고서 필터 */}
-        {(filters.reportType === 'member' || filters.reportType === 'type') && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filters.reportType === 'member' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  특정 교인 선택 (선택사항)
-                </label>
-                <select
-                  value={filters.memberId}
-                  onChange={(e) => setFilters({...filters, memberId: e.target.value})}
-                  className="input"
-                >
-                  <option value="">전체 교인</option>
-                  {members.map(member => (
-                    <option key={member.member_id} value={member.member_id}>
-                      {member.member_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-            
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filters.reportType === 'member' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                헌금 종류 (선택사항)
+                특정 교인 선택 (선택사항)
               </label>
               <select
-                value={filters.donationTypeId}
-                onChange={(e) => setFilters({...filters, donationTypeId: e.target.value})}
+                value={filters.memberId}
+                onChange={(e) => setFilters({...filters, memberId: e.target.value})}
                 className="input"
               >
-                <option value="">전체</option>
-                {donationTypes.map(type => (
-                  <option key={type.type_id} value={type.type_id}>
-                    {type.type_name}
+                <option value="">전체 교인</option>
+                {members.map(member => (
+                  <option key={member.member_id} value={member.member_id}>
+                    {member.member_name}
                   </option>
                 ))}
               </select>
             </div>
+          )}
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              헌금 종류 (선택사항)
+            </label>
+            <select
+              value={filters.donationTypeId}
+              onChange={(e) => setFilters({...filters, donationTypeId: e.target.value})}
+              className="input"
+            >
+              <option value="">전체</option>
+              {donationTypes.map(type => (
+                <option key={type.type_id} value={type.type_id}>
+                  {type.type_name}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
+        </div>
         
         <div className="mt-6 flex justify-end space-x-3">
           <button
@@ -1262,7 +1221,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         </div>
       </div>
 
-      {/* 교인별 보고서 결과 (개선된 버전) */}
+      {/* 교인별 보고서 결과 (현재 유지) */}
       {filters.reportType === 'member' && memberReportData.length > 0 && (
         <div className="card">
           <div className="card-header flex items-center justify-between">
@@ -1577,6 +1536,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
                   <th>순번</th>
                   <th>성명</th>
                   <th>기부 기간</th>
+                  <th>헌금 건수</th>
                   <th className="text-right">총 헌금액</th>
                   <th className="text-center">영수증</th>
                 </tr>
@@ -1587,6 +1547,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
                     <td>{index + 1}</td>
                     <td className="font-medium">{receipt.memberName}</td>
                     <td>{receipt.period}</td>
+                    <td className="text-center">{receipt.donationCount}건</td>
                     <td className="text-right font-bold">{formatCurrency(receipt.totalAmount)}</td>
                     <td className="text-center">
                       <button
@@ -1601,7 +1562,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
               </tbody>
               <tfoot className="bg-gray-50">
                 <tr>
-                  <td colSpan={3} className="font-bold">합계</td>
+                  <td colSpan={4} className="font-bold">합계</td>
                   <td className="text-right font-bold text-lg">
                     {formatCurrency(receiptData.reduce((sum, r) => sum + r.totalAmount, 0))}
                   </td>
