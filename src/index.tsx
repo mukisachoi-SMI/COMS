@@ -5,6 +5,29 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
+// 다크모드 감지 및 적용
+const detectDarkMode = () => {
+  // 시스템 다크모드 설정 감지
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  
+  const updateDarkMode = (e: MediaQueryListEvent | MediaQueryList) => {
+    if (e.matches) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+  
+  // 초기 설정
+  updateDarkMode(darkModeMediaQuery);
+  
+  // 변경 감지
+  darkModeMediaQuery.addEventListener('change', updateDarkMode);
+};
+
+// 다크모드 감지 실행
+detectDarkMode();
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
