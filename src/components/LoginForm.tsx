@@ -135,6 +135,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                 placeholder="예: seoulch"
                 disabled={isLoading}
                 autoComplete="username"
+                style={{
+                  color: '#111827',
+                  WebkitTextFillColor: '#111827',
+                  backgroundColor: 'white'
+                }}
               />
             </div>
 
@@ -153,6 +158,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                 placeholder="패스워드를 입력하세요"
                 disabled={isLoading}
                 autoComplete="current-password"
+                style={{
+                  color: '#111827',
+                  WebkitTextFillColor: '#111827',
+                  backgroundColor: 'white'
+                }}
               />
             </div>
 
