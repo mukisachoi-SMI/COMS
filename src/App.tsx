@@ -7,6 +7,7 @@ import Donations from './components/Donation';
 import MobileDonation from './components/MobileDonation';
 import Settings from './components/Settings';
 import Reports from './components/Reports';
+import Help from './components/Help';
 import Layout from './components/Layout';
 import ConnectionTest from './components/ConnectionTest';
 import { ChurchSession } from './types';
@@ -93,6 +94,7 @@ function App() {
           } />
           <Route path="/reports" element={<Reports session={session} />} />
           <Route path="/settings" element={<Settings session={session} />} />
+          <Route path="/help" element={<Help />} />
           
           {/* 잘못된 경로는 대시보드로 리다이렉트 */}
           <Route path="*" element={<Navigate to="/" replace />} />

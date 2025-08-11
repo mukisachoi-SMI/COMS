@@ -15,7 +15,8 @@ import {
   Bell,
   Plus,
   ChevronRight,
-  User
+  User,
+  HelpCircle
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -47,6 +48,7 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
     { name: '헌금 관리', href: '/donations', icon: DollarSign, color: 'text-purple-600' },
     { name: '보고서', href: '/reports', icon: FileText, color: 'text-orange-600' },
     { name: '설정', href: '/settings', icon: Settings, color: 'text-gray-600' },
+    { name: '도움말', href: '/help', icon: HelpCircle, color: 'text-indigo-600' },
   ];
 
   const isCurrentPath = (path: string) => {
