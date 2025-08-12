@@ -65,7 +65,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
   };
 
   return (
-    <div className={`${isStandalone ? 'min-h-screen bg-gray-50 dark:bg-gray-900' : ''}`}>
+    <div className={`${isStandalone ? 'min-h-screen bg-gray-50' : ''}`}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* 헤더 */}
         <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-8 mb-8 text-white">
@@ -99,8 +99,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* 좌측 네비게이션 */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sticky top-4">
-              <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">목차</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sticky top-4">
+              <h2 className="font-semibold text-gray-900 mb-4">목차</h2>
               <nav className="space-y-1">
                 {sections.map((section) => {
                   const Icon = section.icon;
@@ -110,8 +110,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       onClick={() => scrollToSection(section.id)}
                       className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeSection === section.id
-                          ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900'
+                          ? 'bg-primary-50  text-primary-700 '
+                          : 'text-gray-700  hover:bg-gray-50 '
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-3" />
@@ -126,21 +126,21 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
           {/* 메인 콘텐츠 */}
           <div className="lg:col-span-3 space-y-8">
             {/* 시작하기 */}
-            <section id="intro" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <Home className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-400" />
+            <section id="intro" className="bg-white rounded-lg shadow-sm border border-gray-200  p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <Home className="w-6 h-6 mr-3 text-primary-600 0" />
                 시작하기
               </h2>
               
-              <div className="prose max-w-none text-gray-700 dark:text-gray-300">
+              <div className="prose max-w-none text-gray-700 ">
                 <p className="text-lg mb-4">
                   교회 헌금관리시스템은 한인교회의 효율적인 재정 관리와 교인 관리를 위해 특별히 설계된 
                   종합 관리 솔루션입니다.
                 </p>
                 
-                <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 my-6">
-                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">💡 이 시스템으로 할 수 있는 일</p>
-                  <ul className="space-y-2 text-blue-800 dark:text-blue-200">
+                <div className="bg-blue-50  border-l-4 border-blue-500 p-4 my-6">
+                  <p className="font-semibold text-blue-900  mb-2">💡 이 시스템으로 할 수 있는 일</p>
+                  <ul className="space-y-2 text-blue-800 ">
                     <li>✓ 교인 정보를 체계적으로 관리</li>
                     <li>✓ 헌금 내역을 정확하게 기록</li>
                     <li>✓ 다양한 보고서로 교회 재정 현황 파악</li>
@@ -172,36 +172,36 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 설치 및 접속 */}
-            <section id="install" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <Download className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-300" />
+            <section id="install" className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <Download className="w-6 h-6 mr-3 text-primary-600 " />
                 설치 및 접속
               </h2>
 
-              <div className="space-y-6 text-gray-800 dark:text-gray-200">
+              <div className="space-y-6 text-blue-800 ">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">웹 브라우저로 접속하기</h3>
+                  <h3 className="text-lg font-semibold text-gray-900  mb-3">웹 브라우저로 접속하기</h3>
                   <div className="bg-gray-50 bg-white rounded-lg p-4">
                     <ol className="space-y-3">
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">웹 브라우저 열기</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
+                          <p className="font-medium">웹 브라우저 열기</p>
+                          <p className="text-sm">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
+                          <p className="font-medium">시스템 주소 입력</p>
+                          <p className="text-sm">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">로그인</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">교회 로그인 ID와 패스워드 입력</p>
+                          <p className="font-medium">로그인</p>
+                          <p className="text-sm">교회 로그인 ID와 패스워드 입력</p>
                         </div>
                       </li>
                     </ol>
@@ -232,9 +232,9 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4">
-                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">⚠️ 첫 접속 시 주의사항</p>
-                  <ul className="text-sm text-yellow-800 dark:text-yellow-200 space-y-1">
+                <div className="bg-yellow-50  border-l-4 border-yellow-500 p-4">
+                  <p className="font-semibold text-yellow-900  mb-2">⚠️ 첫 접속 시 주의사항</p>
+                  <ul className="text-sm text-yellow-800  space-y-1">
 {/*                     <li>• 초기 패스워드는 반드시 변경하세요</li> */}
                     <li>• 로그인 정보는 안전한 곳에 보관하세요</li>
                     <li>• 공용 컴퓨터에서는 사용 후 반드시 로그아웃하세요</li>
@@ -244,14 +244,14 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 대시보드 */}
-            <section id="dashboard" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <PieChart className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-400" />
+            <section id="dashboard" className="bg-white  rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 className="text-2xl font-bold text-gray-900  mb-4 flex items-center">
+                <PieChart className="w-6 h-6 mr-3 text-primary-600" />
                 대시보드
               </h2>
 
               <div className="space-y-4">
-                <p className="text-gray-700 dark:text-gray-100">
+                <p className="text-gray-700 ">
                   대시보드는 교회의 현황을 한눈에 파악할 수 있는 종합 현황판입니다. 
                   로그인 후 가장 먼저 보이는 화면으로, 중요한 정보들이 요약되어 있습니다.
                 </p>
@@ -278,8 +278,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 </div>
 
                 <div className="border-l-4 border-primary-500 pl-4 mt-4">
-                  <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">💡 활용 팁</p>
-                  <p className="text-sm text-gray-700 dark:text-gray-100">
+                  <p className="font-semibold text-gray-900  mb-2">💡 활용 팁</p>
+                  <p className="text-sm text-gray-700 ">
                     매주 월요일 아침, 대시보드를 확인하여 지난 주의 헌금 현황을 파악하고 
                     이번 주 사역 계획을 세우는 데 활용하세요.
                   </p>
@@ -288,37 +288,37 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 교인 관리 */}
-            <section id="members" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <Users className="w-6 h-6 mr-3 text-primary-600 dark:text-gray-400" />
+            <section id="members" className="bg-white  rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 className="text-2xl font-bold text-gray-900  mb-4 flex items-center">
+                <Users className="w-6 h-6 mr-3 text-primary-600 " />
                 교인 관리
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 등록하기</h3>
-                  <div className="bg-gray-50 text-gray-900 dark:text-gray-300 rounded-lg p-4">
-                    <p className="font-semibold text-green-900 dark:text-green-100 mb-3">새 교인을 등록하는 방법:</p>
+                  <h3 className="text-lg font-semibold text-gray-900  mb-3">교인 등록하기</h3>
+                  <div className="bg-gray-50 text-gray-900  rounded-lg p-4">
+                    <p className="font-semibold text-green-900  mb-3">새 교인을 등록하는 방법:</p>
                     <ol className="space-y-2">
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900  mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-green-900 dark:text-green-200">기본 정보 입력</span>
-                          <p className="text-sm text-gray-800 dark:text-gray-300">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
+                          <span className="font-medium text-green-900 ">기본 정보 입력</span>
+                          <p className="text-sm text-gray-800 ">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900  mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-green-900 dark:text-green-100">직분 선택</span>
-                          <p className="text-sm text-gray-800 dark:text-gray-300">목사, 장로, 권사, 집사 등 해당 직분을 선택합니다.</p>
+                          <span className="font-medium text-green-900 ">직분 선택</span>
+                          <p className="text-sm text-gray-800">목사, 장로, 권사, 집사 등 해당 직분을 선택합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900  mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-green-900 dark:text-green-100">직분 상태 설정</span>
-                          <p className="text-sm text-gray-800 dark:text-gray-300">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
+                          <span className="font-medium text-green-900 ">직분 상태 설정</span>
+                          <p className="text-sm text-gray-800 ">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
                         </div>
                       </li>
                     </ol>
@@ -326,29 +326,29 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 검색 및 관리</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">교인 검색 및 관리</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">🔍 빠른 검색</h4>
-                      <p className="text-sm text-gray-900 dark:text-gray-100">
+                      <p className="text-sm text-gray-900 ">
                         이름, 전화번호로 교인을 빠르게 찾을 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">🏷️ 직분별 필터</h4>
-                      <p className="text-sm text-gray-900 dark:text-gray-100">
+                      <p className="text-sm text-gray-900 ">
                         특정 직분의 교인들만 선택하여 볼 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">📋 일괄 작업</h4>
-                      <p className="text-sm text-gray-900 dark:text-gray-100">
+                      <p className="text-sm text-gray-900 ">
                         여러 교인을 선택하여 한 번에 수정할 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">📱 연락처 관리</h4>
-                      <p className="text-sm text-gray-900 dark:text-gray-100">
+                      <p className="text-sm text-gray-900 ">
                         전화번호와 주소를 최신 상태로 유지합니다.
                       </p>
                     </div>
@@ -366,7 +366,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 헌금 관리 */}
-            <section id="donations" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700p-6">
+            <section id="donations" className="bg-white  rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <DollarSign className="w-6 h-6 mr-3 text-primary-600" />
                 헌금 관리
@@ -447,7 +447,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 보고서 */}
-            <section id="reports" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <section id="reports" className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <FileText className="w-6 h-6 mr-3 text-primary-600" />
                 보고서
@@ -502,7 +502,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 설정 */}
-            <section id="settings" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <section id="settings" className="bg-white rounded-lg shadow-sm border border-gray-200  p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <Settings className="w-6 h-6 mr-3 text-primary-600" />
                 설정
@@ -571,7 +571,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 목회적 활용 */}
-            <section id="pastoral" className="bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <section id="pastoral" className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg shadow-sm border border-gray-200  p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <Heart className="w-6 h-6 mr-3 text-purple-600" />
                 목회적 활용 방안
@@ -682,7 +682,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* FAQ */}
-            <section id="faq" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <section id="faq" className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <HelpCircle className="w-6 h-6 mr-3 text-primary-600" />
                 자주 묻는 질문
