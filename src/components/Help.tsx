@@ -110,8 +110,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       onClick={() => scrollToSection(section.id)}
                       className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeSection === section.id
-                          ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700' dark:text-primary-300
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50' dark:hover:bg-gray-900
+                          ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900'
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-3" />
