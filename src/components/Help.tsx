@@ -178,7 +178,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 설치 및 접속
               </h2>
 
-              <div className="space-y-6 text-gray-800 dark:text-gray-200">
+              <div className="space-y-6 text-blue-800 dark:text-blue-200">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">웹 브라우저로 접속하기</h3>
                   <div className="bg-gray-50 bg-white rounded-lg p-4">
@@ -186,22 +186,22 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">웹 브라우저 열기</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
+                          <p className="font-medium">웹 브라우저 열기</p>
+                          <p className="text-sm">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
+                          <p className="font-medium">시스템 주소 입력</p>
+                          <p className="text-sm">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">로그인</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-100">교회 로그인 ID와 패스워드 입력</p>
+                          <p className="font-medium">로그인</p>
+                          <p className="text-sm">교회 로그인 ID와 패스워드 입력</p>
                         </div>
                       </li>
                     </ol>
