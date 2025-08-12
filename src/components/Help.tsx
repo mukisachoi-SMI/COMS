@@ -178,10 +178,10 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 설치 및 접속
               </h2>
 
-              <div className="space-y-6 text-gray-800 dark:text-gray-200"">
+              <div className="space-y-6 text-gray-800 dark:text-gray-200">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-400">웹 브라우저로 접속하기</h3>
-                  <div className="bg-gray-50 bg-white dark:bg-gray-800 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">웹 브라우저로 접속하기</h3>
+                  <div className="bg-gray-50 bg-white rounded-lg p-4">
                     <ol className="space-y-3">
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
