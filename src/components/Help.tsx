@@ -298,7 +298,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 등록하기</h3>
                   <div className="bg-gray-50 text-gray-900 dark:text-gray-300 rounded-lg p-4">
-                    <p className=""font-semibold text-green-900 mb-3">새 교인을 등록하는 방법:</p>
+                    <p className=""font-semibold mb-3">새 교인을 등록하는 방법:</p>
                     <ol className="space-y-2">
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
