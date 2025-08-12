@@ -186,14 +186,14 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-mediumtext-gray-900 dark:text-gray-300">웹 브라우저 열기</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">웹 브라우저 열기</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark-text-gray-300">시스템 주소 입력</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">시스템 주소 입력</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
@@ -278,8 +278,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 </div>
 
                 <div className="border-l-4 border-primary-500 pl-4 mt-4">
-                  <p className="font-semibold text-gray-900 mb-2">💡 활용 팁</p>
-                  <p className="text-sm text-gray-700">
+                  <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">💡 활용 팁</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-100">
                     매주 월요일 아침, 대시보드를 확인하여 지난 주의 헌금 현황을 파악하고 
                     이번 주 사역 계획을 세우는 데 활용하세요.
                   </p>
@@ -289,36 +289,36 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
 
             {/* 교인 관리 */}
             <section id="members" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Users className="w-6 h-6 mr-3 text-primary-600" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                <Users className="w-6 h-6 mr-3 text-primary-600 dark:text-gray-400" />
                 교인 관리
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">교인 등록하기</h3>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 등록하기</h3>
+                  <div className="bg-gray-50 text-gray-900 dark:text-gray-300 rounded-lg p-4">
                     <p className="mb-3">새 교인을 등록하는 방법:</p>
                     <ol className="space-y-2">
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium">기본 정보 입력</span>
-                          <p className="text-sm text-gray-600">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
+                          <span className="font-medium text-gray-900 dark:text-gray-300">기본 정보 입력</span>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium">직분 선택</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-300">직분 선택</span>
                           <p className="text-sm text-gray-600">목사, 장로, 권사, 집사 등 해당 직분을 선택합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium">직분 상태 설정</span>
-                          <p className="text-sm text-gray-600">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
+                          <span className="font-medium text-gray-900 dark:text-gray-300">직분 상태 설정</span>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
                         </div>
                       </li>
                     </ol>
@@ -326,7 +326,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">교인 검색 및 관리</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 검색 및 관리</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">🔍 빠른 검색</h4>
