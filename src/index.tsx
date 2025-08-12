@@ -7,22 +7,58 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // 다크모드 감지 및 적용
 const detectDarkMode = () => {
-  // 시스템 다크모드 설정 감지
-  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  // 저장된 다크모드 설정 확인
+  const savedMode = localStorage.getItem('darkMode');
   
-  const updateDarkMode = (e: MediaQueryListEvent | MediaQueryList) => {
-    if (e.matches) {
+  if (savedMode !== null) {
+    // 저장된 설정이 있으면 사용
+    if (savedMode === 'true') {
       document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
+      document.body.style.backgroundColor = '#111827';
+      document.body.style.color = '#f3f4f6';
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.style.colorScheme = 'light';
+      document.body.style.backgroundColor = '#ffffff';
+      document.body.style.color = '#111827';
     }
-  };
+  } else {
+    // 저장된 설정이 없으면 시스템 설정 사용
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const updateDarkMode = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.colorScheme = 'dark';
+        document.body.style.backgroundColor = '#111827';
+        document.body.style.color = '#f3f4f6';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#111827';
+      }
+    };
+    
+    // 초기 설정
+    updateDarkMode(darkModeMediaQuery);
+    
+    // 변경 감지
+    darkModeMediaQuery.addEventListener('change', updateDarkMode);
+  }
   
-  // 초기 설정
-  updateDarkMode(darkModeMediaQuery);
-  
-  // 변경 감지
-  darkModeMediaQuery.addEventListener('change', updateDarkMode);
+  // iOS Safari 강화
+  if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+    // iOS에서 meta 태그 추가 설정
+    const metaColorScheme = document.querySelector('meta[name="color-scheme"]');
+    if (!metaColorScheme) {
+      const meta = document.createElement('meta');
+      meta.name = 'color-scheme';
+      meta.content = 'light dark';
+      document.head.appendChild(meta);
+    }
+  }
 };
 
 // 다크모드 감지 실행

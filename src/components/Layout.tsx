@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChurchSession } from '../types';
 import ChurchLogo from './ChurchLogo';
+import DarkModeToggle from './DarkModeToggle';
 import { 
   Church, 
   Home, 
@@ -309,6 +310,9 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
 
               {/* 헤더 액션 */}
               <div className="flex items-center space-x-2">
+                {/* 다크모드 토글 */}
+                <DarkModeToggle />
+                
                 {/* 알림 버튼 */}
                 <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors">
                   <Bell className="w-5 h-5" />
