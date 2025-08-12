@@ -298,27 +298,27 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">교인 등록하기</h3>
                   <div className="bg-gray-50 text-gray-900 dark:text-gray-300 rounded-lg p-4">
-                    <p className="mb-3">새 교인을 등록하는 방법:</p>
+                    <p className=""font-semibold text-green-900 mb-3">새 교인을 등록하는 방법:</p>
                     <ol className="space-y-2">
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900 dark:text-gray-300">기본 정보 입력</span>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
+                          <span className="font-medium text-green-900 dark:text-green-200">기본 정보 입력</span>
+                          <p className="text-sm text-gray-800 dark:text-gray-300">이름, 전화번호, 주소 등 기본 정보를 입력합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900 dark:text-gray-300">직분 선택</span>
-                          <p className="text-sm text-gray-600">목사, 장로, 권사, 집사 등 해당 직분을 선택합니다.</p>
+                          <span className="font-medium text-green-900 dark:text-green-100">직분 선택</span>
+                          <p className="text-sm text-gray-800 dark:text-gray-300">목사, 장로, 권사, 집사 등 해당 직분을 선택합니다.</p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-gray-400 mr-2 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-gray-900 dark:text-gray-100 mr-2 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900 dark:text-gray-300">직분 상태 설정</span>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
+                          <span className="font-medium text-green-900 dark:text-green-100">직분 상태 설정</span>
+                          <p className="text-sm text-gray-800 dark:text-gray-300">시무, 은퇴, 협동 등 현재 상태를 지정합니다.</p>
                         </div>
                       </li>
                     </ol>
@@ -330,25 +330,25 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">🔍 빠른 검색</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-900 dark:text-gray-100">
                         이름, 전화번호로 교인을 빠르게 찾을 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">🏷️ 직분별 필터</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-900 dark:text-gray-100">
                         특정 직분의 교인들만 선택하여 볼 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">📋 일괄 작업</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-900 dark:text-gray-100">
                         여러 교인을 선택하여 한 번에 수정할 수 있습니다.
                       </p>
                     </div>
                     <div className="border rounded-lg p-4">
                       <h4 className="font-medium mb-2">📱 연락처 관리</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-900 dark:text-gray-100">
                         전화번호와 주소를 최신 상태로 유지합니다.
                       </p>
                     </div>
