@@ -194,7 +194,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
                           <p className="font-medium text-gray-900 dark:text-gray-900">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-900">제공받은 URL을 주소창에 입력 (예: https://church-system.com)</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-900">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
                       <li className="flex">
