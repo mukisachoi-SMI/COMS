@@ -174,13 +174,13 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             {/* 설치 및 접속 - 다크모드 지원 추가 */}
             <section id="install" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <Download className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-400" />
+                <Download className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-300" />
                 설치 및 접속
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-900">웹 브라우저로 접속하기</h3>
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-300">웹 브라우저로 접속하기</h3>
                   <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                     <ol className="space-y-3">
                       <li className="flex">
