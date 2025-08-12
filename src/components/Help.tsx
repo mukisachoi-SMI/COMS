@@ -172,36 +172,36 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 설치 및 접속 */}
-            <section id="install" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Download className="w-6 h-6 mr-3 text-primary-600" />
+            <section id="install" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                <Download className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-300" />
                 설치 및 접속
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">웹 브라우저로 접속하기</h3>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-300">웹 브라우저로 접속하기</h3>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                     <ol className="space-y-3">
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-medium">웹 브라우저 열기</p>
-                          <p className="text-sm text-gray-600">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
+                          <p className="font-mediumtext-gray-900 dark:text-gray-300">웹 브라우저 열기</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600">제공받은 URL을 주소창에 입력 (예: https://church-system.com)</p>
+                          <p className="font-medium text-gray-900 dark-text-gray-300">시스템 주소 입력</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
                         <div>
-                          <p className="font-medium">로그인</p>
-                          <p className="text-sm text-gray-600">교회 로그인 ID와 패스워드 입력</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">로그인</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">교회 로그인 ID와 패스워드 입력</p>
                         </div>
                       </li>
                     </ol>
@@ -215,7 +215,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       <h4 className="font-semibold mb-2">📱 iPhone/iPad</h4>
                       <ol className="text-sm space-y-1">
                         <li>1. Safari로 시스템 접속</li>
-                        <li>2. 하단 공유 버튼 탭</li>
+                        <li>2. 상상단 공유 버튼 탭</li>
                         <li>3. "홈 화면에 추가" 선택</li>
                         <li>4. "추가" 탭</li>
                       </ol>
@@ -232,10 +232,10 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-                  <p className="font-semibold text-yellow-900 mb-2">⚠️ 첫 접속 시 주의사항</p>
-                  <ul className="text-sm text-yellow-800 space-y-1">
-                    <li>• 초기 패스워드는 반드시 변경하세요</li>
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4">
+                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">⚠️ 첫 접속 시 주의사항</p>
+                  <ul className="text-sm text-yellow-800 dark:text-yellow-200 space-y-1">
+{/*                     <li>• 초기 패스워드는 반드시 변경하세요</li> */}
                     <li>• 로그인 정보는 안전한 곳에 보관하세요</li>
                     <li>• 공용 컴퓨터에서는 사용 후 반드시 로그아웃하세요</li>
                   </ul>
@@ -244,14 +244,14 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 대시보드 */}
-            <section id="dashboard" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <PieChart className="w-6 h-6 mr-3 text-primary-600" />
+            <section id="dashboard" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                <PieChart className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-400" />
                 대시보드
               </h2>
 
               <div className="space-y-4">
-                <p className="text-gray-700">
+                <p className="text-gray-700 dark:text-gray-100">
                   대시보드는 교회의 현황을 한눈에 파악할 수 있는 종합 현황판입니다. 
                   로그인 후 가장 먼저 보이는 화면으로, 중요한 정보들이 요약되어 있습니다.
                 </p>
