@@ -111,7 +111,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeSection === section.id
                           ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900'
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-3" />
@@ -151,19 +151,19 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
 
                 <h3 className="text-lg font-semibold mt-6 mb-3 text-gray-900 dark:text-gray-100">주요 특징</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-900">
                     <h4 className="font-semibold text-primary-600 dark:text-primary-400 mb-2">🏢 교회별 독립 시스템</h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">각 교회의 데이터는 완전히 분리되어 안전하게 관리됩니다.</p>
                   </div>
-                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-900">
                     <h4 className="font-semibold text-primary-600 dark:text-primary-400 mb-2">📱 모바일 지원</h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">스마트폰, 태블릿, 컴퓨터 모든 기기에서 사용 가능합니다.</p>
                   </div>
-                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-900">
                     <h4 className="font-semibold text-primary-600 dark:text-primary-400 mb-2">🔒 보안</h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">암호화된 연결과 자동 로그아웃으로 정보를 보호합니다.</p>
                   </div>
-                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+                  <div className="border dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-900">
                     <h4 className="font-semibold text-primary-600 dark:text-primary-400 mb-2">📊 실시간 통계</h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">대시보드에서 교회 현황을 한눈에 파악할 수 있습니다.</p>
                   </div>
@@ -180,28 +180,28 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">웹 브라우저로 접속하기</h3>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-900">웹 브라우저로 접속하기</h3>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                     <ol className="space-y-3">
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">웹 브라우저 열기</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-900">웹 브라우저 열기</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-900">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">제공받은 URL을 주소창에 입력 (예: https://church-system.com)</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-900">시스템 주소 입력</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-900">제공받은 URL을 주소창에 입력 (예: https://church-system.com)</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">로그인</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">교회 로그인 ID와 패스워드 입력</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-900">로그인</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-900">교회 로그인 ID와 패스워드 입력</p>
                         </div>
                       </li>
                     </ol>
@@ -245,7 +245,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                   <div key={faq.id} className="border dark:border-gray-600 rounded-lg">
                     <button
                       onClick={() => toggleExpand(faq.id)}
-                      className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
                       <span className="font-medium text-gray-900 dark:text-gray-100">{faq.question}</span>
                       <ChevronRight className={`w-5 h-5 text-gray-500 dark:text-gray-400 transform transition-transform ${
@@ -253,7 +253,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       }`} />
                     </button>
                     {expandedItems.includes(faq.id) && (
-                      <div className="px-4 py-3 border-t dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                      <div className="px-4 py-3 border-t dark:border-gray-600 bg-gray-50 dark:bg-gray-900">
                         <p className="text-sm text-gray-700 dark:text-gray-300">{faq.answer}</p>
                       </div>
                     )}
