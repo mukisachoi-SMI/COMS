@@ -186,22 +186,22 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-900">웹 브라우저 열기</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-900">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">웹 브라우저 열기</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Chrome, Firefox, Safari, Edge 등 최신 브라우저 사용 권장</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-900">시스템 주소 입력</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-900">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">시스템 주소 입력</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">제공받은 URL을 주소창에 입력 (예: https://kdncoms.netlify.app)</p>
                         </div>
                       </li>
                       <li className="flex">
                         <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-900">로그인</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-900">교회 로그인 ID와 패스워드 입력</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-300">로그인</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">교회 로그인 ID와 패스워드 입력</p>
                         </div>
                       </li>
                     </ol>
