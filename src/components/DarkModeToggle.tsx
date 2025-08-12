@@ -44,7 +44,7 @@ const DarkModeToggle: React.FC = () => {
     // iOS Safari 강제 리플로우
     if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
       document.body.style.display = 'none';
-      document.body.offsetHeight; // 리플로우 트리거
+      void document.body.offsetHeight; // 리플로우 트리거
       document.body.style.display = '';
     }
   };
