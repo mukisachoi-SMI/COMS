@@ -65,7 +65,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
   };
 
   return (
-    <div className={`${isStandalone ? 'min-h-screen bg-gray-50' : ''}`}>
+    <div className={`${isStandalone ? 'min-h-screen bg-gray-50' dark:bg-gray-900 : ''}`}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* 헤더 */}
         <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-8 mb-8 text-white">
@@ -99,8 +99,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* 좌측 네비게이션 */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sticky top-4">
-              <h2 className="font-semibold text-gray-900 mb-4">목차</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sticky top-4">
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">목차</h2>
               <nav className="space-y-1">
                 {sections.map((section) => {
                   const Icon = section.icon;
@@ -110,8 +110,8 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                       onClick={() => scrollToSection(section.id)}
                       className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeSection === section.id
-                          ? 'bg-primary-50 text-primary-700'
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700' dark:text-primary-300
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50' dark:hover:bg-gray-900
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-3" />
@@ -126,21 +126,21 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
           {/* 메인 콘텐츠 */}
           <div className="lg:col-span-3 space-y-8">
             {/* 시작하기 */}
-            <section id="intro" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Home className="w-6 h-6 mr-3 text-primary-600" />
+            <section id="intro" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                <Home className="w-6 h-6 mr-3 text-primary-600 dark:text-primary-400" />
                 시작하기
               </h2>
               
-              <div className="prose max-w-none text-gray-700">
+              <div className="prose max-w-none text-gray-700 dark:text-gray-300">
                 <p className="text-lg mb-4">
                   교회 헌금관리시스템은 한인교회의 효율적인 재정 관리와 교인 관리를 위해 특별히 설계된 
                   종합 관리 솔루션입니다.
                 </p>
                 
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
-                  <p className="font-semibold text-blue-900 mb-2">💡 이 시스템으로 할 수 있는 일</p>
-                  <ul className="space-y-2 text-blue-800">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 my-6">
+                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">💡 이 시스템으로 할 수 있는 일</p>
+                  <ul className="space-y-2 text-blue-800 dark:text-blue-200">
                     <li>✓ 교인 정보를 체계적으로 관리</li>
                     <li>✓ 헌금 내역을 정확하게 기록</li>
                     <li>✓ 다양한 보고서로 교회 재정 현황 파악</li>
