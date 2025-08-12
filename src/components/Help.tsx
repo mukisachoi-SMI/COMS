@@ -288,7 +288,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 교인 관리 */}
-            <section id="members" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <section id="members" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <Users className="w-6 h-6 mr-3 text-primary-600 dark:text-gray-400" />
                 교인 관리
@@ -366,7 +366,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 헌금 관리 */}
-            <section id="donations" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <section id="donations" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <DollarSign className="w-6 h-6 mr-3 text-primary-600" />
                 헌금 관리
@@ -447,7 +447,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 보고서 */}
-            <section id="reports" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <section id="reports" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <FileText className="w-6 h-6 mr-3 text-primary-600" />
                 보고서
@@ -502,7 +502,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 설정 */}
-            <section id="settings" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <section id="settings" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <Settings className="w-6 h-6 mr-3 text-primary-600" />
                 설정
@@ -571,7 +571,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 목회적 활용 */}
-            <section id="pastoral" className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg shadow-sm border border-purple-200 p-6">
+            <section id="pastoral" className="bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <Heart className="w-6 h-6 mr-3 text-purple-600" />
                 목회적 활용 방안
@@ -682,7 +682,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* FAQ */}
-            <section id="faq" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <section id="faq" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <HelpCircle className="w-6 h-6 mr-3 text-primary-600" />
                 자주 묻는 질문
@@ -752,21 +752,21 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
                   <Phone className="w-5 h-5 mr-3" />
                   <div>
                     <p className="text-sm text-primary-100">전화 문의</p>
-                    <p className="font-semibold">1588-0000</p>
+                    <p className="font-semibold">1588-xxxx</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <Mail className="w-5 h-5 mr-3" />
                   <div>
                     <p className="text-sm text-primary-100">이메일</p>
-                    <p className="font-semibold">support@church.com</p>
+                    <p className="font-semibold">mukisa@jiu.ac.kr</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <MessageCircle className="w-5 h-5 mr-3" />
                   <div>
                     <p className="text-sm text-primary-100">카카오톡</p>
-                    <p className="font-semibold">@교회시스템</p>
+                    <p className="font-semibold">@한디포COMS</p>
                   </div>
                 </div>
               </div>
@@ -775,7 +775,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             {/* 버전 정보 */}
             <div className="text-center text-sm text-gray-500 mt-8">
               <p>교회 헌금관리시스템 v1.0.0 | 한인 디아스포라 네트워크</p>
-              <p className="mt-1">© 2025 Church Donation Management System. All rights reserved.</p>
+              <p className="mt-1">© 2025 Church Offering Management System. All rights reserved.</p>
             </div>
           </div>
         </div>
