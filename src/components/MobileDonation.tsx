@@ -138,7 +138,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   const renderStep1 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-center">헌금 종류 선택</h3>
+      <h3 className="text-lg font-bold text-center text-gray-900">헌금 종류 선택</h3>
       <div className="grid grid-cols-2 gap-3">
         {donationTypes.map(type => (
           <button
@@ -154,7 +154,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
             className={`p-4 border-2 rounded-lg transition-all ${
               formData.donation_type_id === type.type_id
                 ? 'border-primary-500 bg-primary-50 text-primary-700'
-                : 'border-gray-300 hover:border-gray-400'
+                : 'border-gray-300 hover:border-gray-400 text-gray-700'
             }`}
           >
             <div className="text-sm font-medium">{type.type_name}</div>
@@ -166,14 +166,14 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   const renderStep2 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-center">헌금자 선택</h3>
+      <h3 className="text-lg font-bold text-center text-gray-900">헌금자 선택</h3>
       
       {/* 교인 검색 */}
       <div className="space-y-3">
         <input
           type="text"
           placeholder="교인 이름 검색..."
-          className="w-full px-4 py-3 text-lg border rounded-lg"
+          className="w-full px-4 py-3 text-lg border rounded-lg text-gray-900"
           onChange={(e) => {
             const searchTerm = e.target.value.toLowerCase();
             // 검색 결과 표시 로직 삭제
@@ -194,7 +194,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
                 });
                 setStep(3);
               }}
-              className="w-full p-3 text-left border rounded-lg hover:bg-gray-50"
+              className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 text-gray-900"
             >
               <Users className="inline w-4 h-4 mr-2 text-gray-400" />
               {member.member_name}
@@ -204,7 +204,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
         {/* 비교인 */}
         <div className="pt-3 border-t">
-          <p className="text-sm text-gray-600 mb-2">비교인인 경우 이름 직접 입력</p>
+          <p className="text-sm text-gray-700 mb-2">비교인인 경우 이름 직접 입력</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -216,7 +216,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
                 member_id: '',
                 member_name: ''
               })}
-              className="flex-1 px-4 py-3 text-lg border rounded-lg"
+              className="flex-1 px-4 py-3 text-lg border rounded-lg text-gray-900"
             />
             <button
               onClick={() => {
@@ -237,7 +237,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   const renderStep3 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-center">헌금 정보 입력</h3>
+      <h3 className="text-lg font-bold text-center text-gray-900">헌금 정보 입력</h3>
       
       {/* 금액 입력 */}
       <div>
@@ -251,11 +251,11 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
               const value = e.target.value.replace(/[^0-9]/g, '');
               setFormData({...formData, amount: parseInt(value) || 0});
             }}
-            className="w-full px-4 py-4 text-2xl font-bold text-center border-2 rounded-lg"
+            className="w-full px-4 py-4 text-2xl font-bold text-center border-2 rounded-lg text-gray-900"
             placeholder="0"
           />
           {formData.amount > 0 && (
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-sm text-gray-700">
               {formatCurrency(formData.amount)}
             </p>
           )}
@@ -268,7 +268,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
           <button
             key={amount}
             onClick={() => setFormData({...formData, amount})}
-            className="p-3 border rounded-lg hover:bg-gray-50 text-sm font-medium"
+            className="p-3 border rounded-lg hover:bg-gray-50 text-sm font-medium text-gray-700"
           >
             {amount >= 10000 ? `${amount/10000}만원` : `${amount.toLocaleString()}원`}
           </button>
@@ -283,8 +283,8 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
             onClick={() => setFormData({...formData, payment_method: '현금'})}
             className={`p-4 border-2 rounded-lg flex items-center justify-center ${
               formData.payment_method === '현금'
-                ? 'border-primary-500 bg-primary-50'
-                : 'border-gray-300'
+                ? 'border-primary-500 bg-primary-50 text-primary-700'
+                : 'border-gray-300 text-gray-700'
             }`}
           >
             <Banknote className="w-5 h-5 mr-2" />
@@ -294,8 +294,8 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
             onClick={() => setFormData({...formData, payment_method: '온라인'})}
             className={`p-4 border-2 rounded-lg flex items-center justify-center ${
               formData.payment_method === '온라인'
-                ? 'border-primary-500 bg-primary-50'
-                : 'border-gray-300'
+                ? 'border-primary-500 bg-primary-50 text-primary-700'
+                : 'border-gray-300 text-gray-700'
             }`}
           >
             <CreditCard className="w-5 h-5 mr-2" />
@@ -311,7 +311,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
           type="date"
           value={formData.donation_date}
           onChange={(e) => setFormData({...formData, donation_date: e.target.value})}
-          className="w-full px-4 py-3 border rounded-lg"
+          className="w-full px-4 py-3 border rounded-lg text-gray-900"
         />
       </div>
 
@@ -321,7 +321,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
         <textarea
           value={formData.notes}
           onChange={(e) => setFormData({...formData, notes: e.target.value})}
-          className="w-full px-4 py-3 border rounded-lg"
+          className="w-full px-4 py-3 border rounded-lg text-gray-900"
           rows={2}
           placeholder="추가 정보..."
         />
@@ -331,36 +331,36 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   const renderStep4 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-center">헌금 내용 확인</h3>
+      <h3 className="text-lg font-bold text-center text-gray-900">헌금 내용 확인</h3>
       
       <div className="bg-gray-50 rounded-lg p-4 space-y-3">
         <div className="flex justify-between">
-          <span className="text-gray-600">헌금 종류</span>
-          <span className="font-medium">{formData.donation_type_name}</span>
+          <span className="text-gray-700">헌금 종류</span>
+          <span className="font-medium text-gray-900">{formData.donation_type_name}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">헌금자</span>
-          <span className="font-medium">
+          <span className="text-gray-700">헌금자</span>
+          <span className="font-medium text-gray-900">
             {formData.member_name || formData.donor_name || '익명'}
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">헌금액</span>
+          <span className="text-gray-700">헌금액</span>
           <span className="font-bold text-lg text-green-600">
             {formatCurrency(formData.amount)}
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">헌금방법</span>
-          <span className="font-medium">{formData.payment_method}</span>
+          <span className="text-gray-700">헌금방법</span>
+          <span className="font-medium text-gray-900">{formData.payment_method}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">날짜</span>
-          <span className="font-medium">{formData.donation_date}</span>
+          <span className="text-gray-700">날짜</span>
+          <span className="font-medium text-gray-900">{formData.donation_date}</span>
         </div>
         {formData.notes && (
           <div className="pt-2 border-t">
-            <span className="text-gray-600 text-sm">메모: {formData.notes}</span>
+            <span className="text-gray-700 text-sm">메모: {formData.notes}</span>
           </div>
         )}
       </div>
@@ -396,7 +396,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
           )}
         </button>
         
-        <h2 className="text-lg font-bold">헌금 등록</h2>
+        <h2 className="text-lg font-bold text-gray-900">헌금 등록</h2>
         
         <button
           onClick={handleReset}
@@ -418,7 +418,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
             />
           ))}
         </div>
-        <div className="flex justify-between mt-2 text-xs text-gray-600">
+        <div className="flex justify-between mt-2 text-xs text-gray-700">
           <span className={step === 1 ? 'font-bold' : ''}>종류</span>
           <span className={step === 2 ? 'font-bold' : ''}>헌금자</span>
           <span className={step === 3 ? 'font-bold' : ''}>정보</span>
