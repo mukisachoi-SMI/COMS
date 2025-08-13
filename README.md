@@ -1,6 +1,6 @@
-# 📊 교회 헌금관리시스템 (Church Donation Management System)
+# 📊 교회 헌금관리시스템 (Church Offering Management System)
 
-## 🎯 Version 1.0.0 - Phase 1 Complete
+## 🎯 Version PHASE_1.0 - Phase 1 Complete
 
 ### 📅 Release Date: 2025-01-13
 
@@ -14,12 +14,13 @@
 - **Frontend**: React 18, TypeScript, Tailwind CSS
 - **Backend**: Supabase (PostgreSQL)
 - **Storage**: Supabase Storage
-- **PWA**: Service Worker, Offline Support ✅
-- **Deployment**: Vercel/Netlify Ready
+- **Authentication**: Supabase Auth (JWT)
+- **Deployment**: Netlify Ready
+- **Security**: Row Level Security (RLS)
 
 ---
 
-## ✅ Phase 1 완성 기능 (v1.0.0)
+## ✅ Phase 1 완성 기능 (PHASE_1.0)
 
 ### 1. 🔐 인증 및 권한 관리
 - [x] 교회별 독립 로그인 시스템
