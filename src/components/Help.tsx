@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Book, 
   ChevronRight, 
@@ -10,7 +10,6 @@ import {
   Heart,
   Lightbulb,
   HelpCircle,
-  Play,
   Download,
   Shield,
   Church,
@@ -18,7 +17,6 @@ import {
   Mail,
   MessageCircle,
   CheckCircle,
-  ArrowRight,
   Star,
   TrendingUp,
   UserCheck,
@@ -366,7 +364,7 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
             </section>
 
             {/* 헌금 관리 */}
-            <section id="donations" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700p-6">
+            <section id="donations" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                 <DollarSign className="w-6 h-6 mr-3 text-primary-600" />
                 헌금 관리
