@@ -466,15 +466,15 @@ const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <p className="text-sm text-indigo-100">전화 문의</p>
-                  <p className="font-semibold">1588-0000</p>
+                  <p className="font-semibold">1588-xxxx</p>
                 </div>
                 <div>
                   <p className="text-sm text-indigo-100">이메일</p>
-                  <p className="font-semibold">support@church.com</p>
+                  <p className="font-semibold">mukisa@jiu.ac.kr</p>
                 </div>
                 <div>
-                  <p className="text-sm text-indigo-100">카카오톡</p>
-                  <p className="font-semibold">@교회시스템</p>
+                  <p className="text-sm text-indigo-100">카카오톡 채널</p>
+                  <p className="font-semibold">@한디포COMS</p>
                 </div>
               </div>
             </section>
