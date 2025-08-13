@@ -28,12 +28,15 @@
     <!-- 동적 manifest 링크 -->
     <link rel="manifest" id="manifest-link" href="%PUBLIC_URL%/manifest.json" />
     
-    <!-- 동적 아이콘 설정 스크립트 -->
+    <!-- 강화된 테마별 아이콘 설정 -->
     <script>
       (function() {
         // 다크 모드 감지
         const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const iconPrefix = isDarkMode ? 'coms_d' : 'coms_b';
+        
+        console.log('🎨 테마 감지:', isDarkMode ? 'Dark Mode' : 'Light Mode');
+        console.log('📁 사용할 아이콘:', iconPrefix);
         
         // manifest 파일 동적 설정
         const manifestLink = document.getElementById('manifest-link');
@@ -47,49 +50,84 @@
           themeColor.content = '#1f2937';
         }
         
-        // favicon 동적 생성
+        // 캐시 무력화를 위한 타임스탬프
+        const timestamp = Date.now();
+        
+        // 1. ICO 형식 favicon (가장 높은 우선순위)
+        const faviconIco = document.createElement('link');
+        faviconIco.rel = 'icon';
+        faviconIco.type = 'image/x-icon';
+        faviconIco.href = `%PUBLIC_URL%/${iconPrefix}.ico?v=${timestamp}`;
+        document.head.appendChild(faviconIco);
+        
+        // 2. shortcut icon (IE 호환성)
+        const shortcutIcon = document.createElement('link');
+        shortcutIcon.rel = 'shortcut icon';
+        shortcutIcon.type = 'image/x-icon';
+        shortcutIcon.href = `%PUBLIC_URL%/${iconPrefix}.ico?v=${timestamp}`;
+        document.head.appendChild(shortcutIcon);
+        
+        // 3. PNG 형식 favicon (고해상도)
         const favicon16 = document.createElement('link');
         favicon16.rel = 'icon';
         favicon16.type = 'image/png';
         favicon16.sizes = '16x16';
-        favicon16.href = `%PUBLIC_URL%/icons/${iconPrefix}-16x16.png`;
+        favicon16.href = `%PUBLIC_URL%/icons/${iconPrefix}-16x16.png?v=${timestamp}`;
         document.head.appendChild(favicon16);
         
         const favicon32 = document.createElement('link');
         favicon32.rel = 'icon';
         favicon32.type = 'image/png';
         favicon32.sizes = '32x32';
-        favicon32.href = `%PUBLIC_URL%/icons/${iconPrefix}-32x32.png`;
+        favicon32.href = `%PUBLIC_URL%/icons/${iconPrefix}-32x32.png?v=${timestamp}`;
         document.head.appendChild(favicon32);
         
-        // iOS 아이콘 동적 생성
-        const iosSizes = ['72x72', '96x96', '128x128', '144x144', '152x152', '192x192', '384x384', '512x512'];
+        // 4. iOS 아이콘들
+        const iosSizes = ['180x180', '152x152', '144x144', '120x120', '114x114', '76x76', '72x72', '57x57'];
         iosSizes.forEach(size => {
           const link = document.createElement('link');
           link.rel = 'apple-touch-icon';
           link.sizes = size;
-          link.href = `%PUBLIC_URL%/icons/${iconPrefix}-${size}.png`;
+          link.href = `%PUBLIC_URL%/icons/${iconPrefix}-${size}.png?v=${timestamp}`;
           document.head.appendChild(link);
         });
         
-        // 스플래시 스크린
+        // 5. 일반적인 크기들
+        const standardSizes = ['96x96', '128x128', '192x192', '384x384', '512x512'];
+        standardSizes.forEach(size => {
+          const link = document.createElement('link');
+          link.rel = 'icon';
+          link.type = 'image/png';
+          link.sizes = size;
+          link.href = `%PUBLIC_URL%/icons/${iconPrefix}-${size}.png?v=${timestamp}`;
+          document.head.appendChild(link);
+        });
+        
+        // 6. 스플래시 스크린 (iOS)
         const splashScreen = document.createElement('link');
         splashScreen.rel = 'apple-touch-startup-image';
-        splashScreen.href = `%PUBLIC_URL%/icons/${iconPrefix}-512x512.png`;
+        splashScreen.href = `%PUBLIC_URL%/icons/${iconPrefix}-512x512.png?v=${timestamp}`;
         document.head.appendChild(splashScreen);
         
-        // 다크 모드 변경 감지
+        console.log('✅ 모든 아이콘이 동적으로 설정되었습니다');
+        
+        // 테마 변경 감지 및 자동 업데이트
         if (window.matchMedia) {
           window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            // 페이지 새로고침하여 새 아이콘 적용
+            console.log('🔄 테마 변경 감지:', e.matches ? 'Dark' : 'Light');
+            
+            // Service Worker에 테마 변경 알림
             if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
               navigator.serviceWorker.controller.postMessage({
                 type: 'THEME_CHANGED',
                 theme: e.matches ? 'dark' : 'light'
               });
             }
-            // 필요시 페이지 리로드
-            // window.location.reload();
+            
+            // 페이지 새로고침하여 새 아이콘 적용
+            setTimeout(() => {
+              window.location.reload();
+            }, 100);
           });
         }
       })();
