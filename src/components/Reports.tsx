@@ -1030,8 +1030,8 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         <div className="flex items-center space-x-3">
           <FileText className="w-8 h-8 text-primary-600" />
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">보고서</h2>
-            <p className="text-gray-600">헌금 보고서 생성 및 기부금 영수증 발급</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">보고서</h2>
+            <p className="text-gray-600 dark:text-gray-300">헌금 보고서 생성 및 기부금 영수증 발급</p>
           </div>
         </div>
       </div>
@@ -1039,7 +1039,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {/* 보고서 종류 선택 */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium">보고서 종류 선택</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">보고서 종류 선택</h3>
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -1055,8 +1055,8 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
               onClick={() => setFilters({...filters, reportType: type.value as any})}
               className={`p-4 border rounded-lg transition-all ${
                 filters.reportType === type.value
-                  ? 'border-primary-500 bg-primary-50 text-primary-700'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900 dark:text-primary-300 dark:border-primary-400'
+                  : 'border-gray-200 hover:border-gray-300 text-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
               <type.icon className="w-6 h-6 mx-auto mb-2" />
@@ -1069,13 +1069,13 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {/* 필터 설정 */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium">조건 설정</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">조건 설정</h3>
         </div>
         
         {/* 보고서 타입별 조건 설정 */}
         {filters.reportType === 'yearly' && (
-          <div className="mb-4 p-4 bg-purple-50 rounded-lg">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               조회할 연도 선택
             </label>
             <select
@@ -1097,8 +1097,8 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         
         {filters.reportType === 'monthly' && (
           <>
-            <div className="mb-4 p-4 bg-green-50 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 조회할 연월 선택
               </label>
               <input
@@ -1111,7 +1111,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   특정 교인 선택 (선택사항)
                 </label>
                 <select
@@ -1129,7 +1129,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   헌금 종류 (선택사항)
                 </label>
                 <select
@@ -1150,8 +1150,8 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         )}
         
         {filters.reportType === 'donation_receipt' && (
-          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               영수증 발급 연도
             </label>
             <select
@@ -1174,7 +1174,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
         {(filters.reportType === 'member' || filters.reportType === 'type') && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 시작 날짜
               </label>
               <input
@@ -1186,7 +1186,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 종료 날짜
               </label>
               <input
@@ -1204,7 +1204,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filters.reportType === 'member' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   특정 교인 선택 (선택사항)
                 </label>
                 <select
@@ -1223,7 +1223,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
             )}
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 헌금 종류 (선택사항)
               </label>
               <select
@@ -1267,7 +1267,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {filters.reportType === 'member' && memberReportData.length > 0 && (
         <div className="card">
           <div className="card-header flex items-center justify-between">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               교인별 상세 보고서 ({memberReportData.length}명)
             </h3>
             <div className="flex space-x-2">
@@ -1305,32 +1305,32 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
           </div>
 
           {/* 전체 요약 통계 */}
-          <div className="p-4 bg-gray-50 border-b">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <div className="text-sm text-gray-600">총 헌금액</div>
-                <div className="text-2xl font-bold text-green-600">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600 dark:text-gray-400">총 헌금액</div>
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {formatCurrency(memberReportData.reduce((sum, m) => sum + m.totalAmount, 0))}
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <div className="text-sm text-gray-600">평균 헌금액</div>
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600 dark:text-gray-400">평균 헌금액</div>
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {formatCurrency(
                     memberReportData.reduce((sum, m) => sum + m.totalAmount, 0) / 
                     Math.max(memberReportData.length, 1)
                   )}
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <div className="text-sm text-gray-600">정기 헌금자</div>
-                <div className="text-2xl font-bold text-purple-600">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600 dark:text-gray-400">정기 헌금자</div>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {memberReportData.filter(m => m.donationFrequency === 'regular').length}명
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <div className="text-sm text-gray-600">전년 대비 상승</div>
-                <div className="text-2xl font-bold text-orange-600">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600 dark:text-gray-400">전년 대비 상승</div>
+                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                   {memberReportData.filter(m => 
                     m.yearComparison && m.yearComparison.changePercent > 0
                   ).length}명
@@ -1559,7 +1559,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {filters.reportType === 'donation_receipt' && receiptData.length > 0 && (
         <div className="card">
           <div className="card-header flex items-center justify-between">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               기부금 영수증 ({receiptData.length}명)
             </h3>
             <button
@@ -1618,26 +1618,26 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {filters.reportType === 'monthly' && reportData && (
         <div className="card">
           <div className="card-header">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               {reportData.month} 월별 보고서
             </h3>
           </div>
           
-          <div className="p-4 bg-gray-50 border-b">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-sm text-gray-600">총 헌금액</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">총 헌금액</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {formatCurrency(reportData.total || 0)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">헌금 건수</p>
-                <p className="text-2xl font-bold">{reportData.count || 0}건</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">헌금 건수</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{reportData.count || 0}건</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">평균 헌금액</p>
-                <p className="text-2xl font-bold">
+                <p className="text-sm text-gray-600 dark:text-gray-400">평균 헌금액</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(reportData.count > 0 ? reportData.total / reportData.count : 0)}
                 </p>
               </div>
@@ -1681,32 +1681,32 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {filters.reportType === 'yearly' && reportData && (
         <div className="card">
           <div className="card-header">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               {reportData.year}년 연간 보고서
             </h3>
           </div>
           
-          <div className="p-4 bg-gray-50 border-b">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
             <div className="grid grid-cols-4 gap-4">
               <div>
-                <p className="text-sm text-gray-600">총 헌금액</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">총 헌금액</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {formatCurrency(reportData.total || 0)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">헌금 건수</p>
-                <p className="text-2xl font-bold">{reportData.count || 0}건</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">헌금 건수</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{reportData.count || 0}건</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">월 평균</p>
-                <p className="text-2xl font-bold">
+                <p className="text-sm text-gray-600 dark:text-gray-400">월 평균</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(reportData.monthlyAverage || 0)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">건당 평균</p>
-                <p className="text-2xl font-bold">
+                <p className="text-sm text-gray-600 dark:text-gray-400">건당 평균</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(reportData.count > 0 ? reportData.total / reportData.count : 0)}
                 </p>
               </div>
@@ -1760,7 +1760,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
       {filters.reportType === 'type' && reportData && Array.isArray(reportData) && (
         <div className="card">
           <div className="card-header">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               헌금 종류별 보고서
             </h3>
           </div>
