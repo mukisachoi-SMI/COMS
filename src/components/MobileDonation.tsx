@@ -173,7 +173,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
         <input
           type="text"
           placeholder="교인 이름 검색..."
-          className="w-full px-4 py-3 text-lg border rounded-lg text-gray-900"
+          className="w-full px-4 py-3 text-lg border rounded-lg text-gray-900 dark:text-white"
           onChange={(e) => {
             const searchTerm = e.target.value.toLowerCase();
             // 검색 결과 표시 로직 삭제
@@ -216,7 +216,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
                 member_id: '',
                 member_name: ''
               })}
-              className="flex-1 px-4 py-3 text-lg border rounded-lg text-gray-900"
+              className="flex-1 px-4 py-3 text-lg border rounded-lg text-gray-900 dark:text-white"
             />
             <button
               onClick={() => {
@@ -251,7 +251,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
               const value = e.target.value.replace(/[^0-9]/g, '');
               setFormData({...formData, amount: parseInt(value) || 0});
             }}
-            className="w-full px-4 py-4 text-2xl font-bold text-center border-2 rounded-lg text-gray-900"
+            className="w-full px-4 py-4 text-2xl font-bold text-center border-2 rounded-lg text-gray-900 dark:text-white"
             placeholder="0"
           />
           {formData.amount > 0 && (
@@ -306,12 +306,12 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
       {/* 날짜 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">헌금 날짜</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">헌금 날짜</label>
         <input
           type="date"
           value={formData.donation_date}
           onChange={(e) => setFormData({...formData, donation_date: e.target.value})}
-          className="w-full px-4 py-3 border rounded-lg text-gray-900"
+          className="w-full px-4 py-3 border rounded-lg text-gray-900 dark:text-white"
         />
       </div>
 
