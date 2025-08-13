@@ -19,6 +19,8 @@ interface MobileDonationProps {
 const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuccess }) => {
   const [step, setStep] = useState(1); // 1: 헌금종류, 2: 헌금자, 3: 금액, 4: 확인
   const [members, setMembers] = useState<{member_id: string, member_name: string}[]>([]);
+  const [filteredMembers, setFilteredMembers] = useState<{member_id: string, member_name: string}[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [donationTypes, setDonationTypes] = useState<DonationType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -40,6 +42,23 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
   useEffect(() => {
     loadInitialData();
   }, [session.churchId]);
+
+  // 교인 검색 필터링
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredMembers(members.slice(0, 10));
+    } else {
+      const filtered = members.filter(member => 
+        member.member_name.toLowerCase().includes(searchTerm.toLowerCase())
+      ).slice(0, 10);
+      setFilteredMembers(filtered);
+    }
+  }, [members, searchTerm]);
+
+  // members가 로드될 때 초기 filteredMembers 설정
+  useEffect(() => {
+    setFilteredMembers(members.slice(0, 10));
+  }, [members]);
 
   const loadInitialData = async () => {
     try {
@@ -126,6 +145,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
       payment_method: '현금',
       notes: ''
     });
+    setSearchTerm('');
     setStep(1);
   };
 
@@ -173,33 +193,43 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
         <input
           type="text"
           placeholder="교인 이름 검색..."
-          className="w-full px-4 py-3 text-lg border rounded-lg text-gray-900 dark:text-white"
+          value={searchTerm}
           onChange={(e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            // 검색 결과 표시 로직 삭제
+            setSearchTerm(e.target.value);
           }}
+          className="w-full px-4 py-3 text-lg border rounded-lg text-gray-900 dark:text-white"
         />
         
-        {/* 자주 선택되는 교인 (최근 헌금자) */}
+        {/* 검색 결과 또는 최근 교인 */}
         <div className="space-y-2 max-h-48 overflow-y-auto">
-          {members.slice(0, 10).map(member => (
-            <button
-              key={member.member_id}
-              onClick={() => {
-                setFormData({
-                  ...formData,
-                  member_id: member.member_id,
-                  member_name: member.member_name,
-                  donor_name: ''
-                });
-                setStep(3);
-              }}
-              className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 text-gray-900"
-            >
-              <Users className="inline w-4 h-4 mr-2 text-gray-400" />
-              {member.member_name}
-            </button>
-          ))}
+          {filteredMembers.length > 0 ? (
+            filteredMembers.map(member => (
+              <button
+                key={member.member_id}
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    member_id: member.member_id,
+                    member_name: member.member_name,
+                    donor_name: ''
+                  });
+                  setStep(3);
+                }}
+                className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 text-gray-900"
+              >
+                <Users className="inline w-4 h-4 mr-2 text-gray-400" />
+                {member.member_name}
+              </button>
+            ))
+          ) : searchTerm.trim() !== '' ? (
+            <div className="p-3 text-center text-gray-500">
+              '{searchTerm}' 검색 결과가 없습니다.
+            </div>
+          ) : (
+            <div className="p-3 text-center text-gray-500">
+              교인 이름을 입력하세요.
+            </div>
+          )}
         </div>
 
         {/* 비교인 */}
