@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA 설치 테스트 - 교회 헌금관리시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-4">📱 PWA 설치 테스트</h1>
+            
+            <!-- 시스템 정보 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-900 mb-2">🔍 브라우저 정보</h3>
+                    <div class="text-sm space-y-1">
+                        <p><strong>브라우저:</strong> <span id="browser-info"></span></p>
+                        <p><strong>플랫폼:</strong> <span id="platform-info"></span></p>
+                        <p><strong>HTTPS:</strong> <span id="https-info"></span></p>
+                        <p><strong>Service Worker 지원:</strong> <span id="sw-support"></span></p>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-green-900 mb-2">⚙️ PWA 상태</h3>
+                    <div class="text-sm space-y-1">
+                        <p><strong>설치 가능:</strong> <span id="installable-status">확인 중...</span></p>
+                        <p><strong>현재 테마:</strong> <span id="theme-info"></span></p>
+                        <p><strong>Manifest 로드:</strong> <span id="manifest-status">확인 중...</span></p>
+                        <p><strong>Service Worker:</strong> <span id="sw-status">확인 중...</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 설치 버튼 -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg p-4 text-white mb-6">
+                <h3 class="font-semibold mb-3">📲 PWA 설치하기</h3>
+                <button id="install-btn" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 disabled:opacity-50" disabled>
+                    설치 대기 중...
+                </button>
+                <button id="ios-guide-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 ml-2" style="display: none;">
+                    iOS 설치 가이드
+                </button>
+            </div>
+
+            <!-- 아이콘 테스트 -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 class="font-semibold text-gray-900 mb-3">🖼️ 아이콘 테스트</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-2">라이트 모드 아이콘</h4>
+                        <div class="flex space-x-2 items-center">
+                            <img src="icons/coms_b-192x192.png" alt="Light Icon" class="w-12 h-12 rounded-lg border" />
+                            <span id="light-icon-status" class="text-sm"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-2">다크 모드 아이콘</h4>
+                        <div class="flex space-x-2 items-center">
+                            <img src="icons/coms_d-192x192.png" alt="Dark Icon" class="w-12 h-12 rounded-lg border" />
+                            <span id="dark-icon-status" class="text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 로그 */
+            <div class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm max-h-60 overflow-y-auto">
+                <div class="font-semibold text-white mb-2">🔧 실시간 로그</div>
+                <div id="log-container"></div>
+            </div>
+
+            <!-- 도움말 -->
+            <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <h3 class="font-semibold text-yellow-800 mb-2">💡 PWA 설치 팁</h3>
+                <ul class="text-sm text-yellow-700 space-y-1">
+                    <li>• <strong>Chrome/Edge:</strong> 주소창 우측의 설치 아이콘 클릭</li>
+                    <li>• <strong>Firefox:</strong> 주소창에 + 아이콘 클릭</li>
+                    <li>• <strong>Safari:</strong> 공유 버튼 → "홈 화면에 추가"</li>
+                    <li>• <strong>개발 서버:</strong> localhost는 PWA 설치가 제한적일 수 있음</li>
+                    <li>• <strong>HTTPS 필요:</strong> 배포된 사이트에서 테스트 권장</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- iOS 가이드 모달 -->
+    <div id="ios-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-sm w-full p-6">
+            <h3 class="text-lg font-semibold mb-4">📱 iOS 설치 방법</h3>
+            <ol class="space-y-3 text-sm text-gray-600">
+                <li>1. Safari 브라우저에서 이 페이지를 열어주세요</li>
+                <li>2. 하단 공유 버튼(📤)을 탭하세요</li>
+                <li>3. "홈 화면에 추가"를 선택하세요</li>
+                <li>4. 우측 상단 "추가"를 탭하세요</li>
+            </ol>
+            <button onclick="document.getElementById('ios-modal').classList.add('hidden')" 
+                    class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 로그 함수
+        function log(message, type = 'info') {
+            const container = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: 'text-green-400',
+                warning: 'text-yellow-400',
+                error: 'text-red-400',
+                success: 'text-blue-400'
+            };
+            container.innerHTML += `<div class="${colors[type]}">[${timestamp}] ${message}</div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 브라우저 정보 설정
+        function setupBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            let browserName = 'Unknown';
+            
+            if (userAgent.includes('Chrome')) browserName = 'Chrome';
+            else if (userAgent.includes('Firefox')) browserName = 'Firefox';
+            else if (userAgent.includes('Safari')) browserName = 'Safari';
+            else if (userAgent.includes('Edge')) browserName = 'Edge';
+            
+            document.getElementById('browser-info').textContent = browserName;
+            document.getElementById('platform-info').textContent = navigator.platform;
+            document.getElementById('https-info').textContent = location.protocol === 'https:' ? 'Yes' : 'No';
+            document.getElementById('sw-support').textContent = 'serviceWorker' in navigator ? 'Yes' : 'No';
+            
+            // 테마 정보
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.getElementById('theme-info').textContent = isDark ? 'Dark' : 'Light';
+            
+            log(`브라우저: ${browserName}, 플랫폼: ${navigator.platform}`);
+            log(`HTTPS: ${location.protocol === 'https:' ? 'Yes' : 'No'}, SW 지원: ${'serviceWorker' in navigator ? 'Yes' : 'No'}`);
+        }
+
+        // Manifest 테스트
+        async function testManifest() {
+            try {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const manifestUrl = isDark ? './manifest-dark.json' : './manifest.json';
+                
+                const response = await fetch(manifestUrl);
+                if (response.ok) {
+                    const manifest = await response.json();
+                    document.getElementById('manifest-status').textContent = '✅ 로드됨';
+                    log(`Manifest 로드 성공: ${manifestUrl}`);
+                    log(`앱 이름: ${manifest.name}, 아이콘 수: ${manifest.icons.length}`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                document.getElementById('manifest-status').textContent = '❌ 실패';
+                log(`Manifest 로드 실패: ${error.message}`, 'error');
+            }
+        }
+
+        // Service Worker 테스트
+        async function testServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('./service-worker.js');
+                    document.getElementById('sw-status').textContent = '✅ 등록됨';
+                    log('Service Worker 등록 성공', 'success');
+                    
+                    registration.addEventListener('updatefound', () => {
+                        log('Service Worker 업데이트 발견', 'info');
+                    });
+                } catch (error) {
+                    document.getElementById('sw-status').textContent = '❌ 실패';
+                    log(`Service Worker 등록 실패: ${error.message}`, 'error');
+                }
+            } else {
+                document.getElementById('sw-status').textContent = '❌ 미지원';
+                log('Service Worker 미지원', 'warning');
+            }
+        }
+
+        // 아이콘 테스트
+        function testIcons() {
+            const lightIcon = document.querySelector('img[alt="Light Icon"]');
+            const darkIcon = document.querySelector('img[alt="Dark Icon"]');
+            
+            lightIcon.onload = () => {
+                document.getElementById('light-icon-status').textContent = '✅ 로드됨';
+                log('라이트 아이콘 로드 성공');
+            };
+            lightIcon.onerror = () => {
+                document.getElementById('light-icon-status').textContent = '❌ 실패';
+                log('라이트 아이콘 로드 실패', 'error');
+            };
+            
+            darkIcon.onload = () => {
+                document.getElementById('dark-icon-status').textContent = '✅ 로드됨';
+                log('다크 아이콘 로드 성공');
+            };
+            darkIcon.onerror = () => {
+                document.getElementById('dark-icon-status').textContent = '❌ 실패';
+                log('다크 아이콘 로드 실패', 'error');
+            };
+        }
+
+        // PWA 설치
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            const installBtn = document.getElementById('install-btn');
+            installBtn.disabled = false;
+            installBtn.textContent = '📲 앱 설치하기';
+            document.getElementById('installable-status').textContent = '✅ 설치 가능';
+            
+            log('PWA 설치 프롬프트 준비됨', 'success');
+        });
+
+        document.getElementById('install-btn').addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                log('설치 프롬프트를 사용할 수 없습니다', 'warning');
+                return;
+            }
+
+            try {
+                await deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                log(`사용자 선택: ${outcome}`, outcome === 'accepted' ? 'success' : 'info');
+                
+                if (outcome === 'accepted') {
+                    document.getElementById('installable-status').textContent = '✅ 설치됨';
+                }
+                
+                deferredPrompt = null;
+            } catch (error) {
+                log(`설치 오류: ${error.message}`, 'error');
+            }
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            log('앱이 성공적으로 설치되었습니다!', 'success');
+            document.getElementById('installable-status').textContent = '✅ 설치 완료';
+        });
+
+        // iOS 감지 및 가이드
+        function setupIOSGuide() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isStandalone = window.navigator.standalone;
+            
+            if (isIOS && !isStandalone) {
+                document.getElementById('ios-guide-btn').style.display = 'inline-block';
+                document.getElementById('installable-status').textContent = '📱 iOS 수동 설치';
+                log('iOS 기기 감지됨 - 수동 설치 가이드 표시', 'info');
+            }
+        }
+
+        document.getElementById('ios-guide-btn').addEventListener('click', () => {
+            document.getElementById('ios-modal').classList.remove('hidden');
+            document.getElementById('ios-modal').classList.add('flex');
+        });
+
+        // 페이지 로드 시 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            log('PWA 테스트 페이지 로드됨', 'info');
+            setupBrowserInfo();
+            testManifest();
+            testServiceWorker();
+            testIcons();
+            setupIOSGuide();
+        });
+
+        // 테마 변경 감지
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            const theme = e.matches ? 'Dark' : 'Light';
+            document.getElementById('theme-info').textContent = theme;
+            log(`테마 변경됨: ${theme}`, 'info');
+            
+            // Manifest 재로드
+            setTimeout(() => {
+                testManifest();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
