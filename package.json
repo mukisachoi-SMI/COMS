@@ -61,21 +61,15 @@
     "serve:pwa": "npx serve -s build -l 3000",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lighthouse": "lighthouse http://localhost:3000 --view",
+    "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint:check": "eslint src --ext .ts,.tsx",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
     "release": "npm run build && git push && git push --tags"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "no-unused-vars": "warn",
-      "@typescript-eslint/no-unused-vars": "warn"
-    }
-  },
+
   "browserslist": {
     "production": [
       ">0.2%",

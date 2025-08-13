@@ -56,7 +56,7 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="spinner mx-auto mb-4"></div>
+          <div className="spinner mx-auto mb-4" />
           <p className="text-gray-600">시스템을 초기화하고 있습니다...</p>
         </div>
       </div>

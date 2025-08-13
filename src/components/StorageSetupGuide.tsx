@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
 import { AlertCircle, CheckCircle, XCircle, Info } from 'lucide-react';
+import { supabase } from '../utils/supabase';
 
 const StorageSetupGuide: React.FC = () => {
   const [bucketStatus, setBucketStatus] = useState<'checking' | 'exists' | 'missing' | 'error'>('checking');
@@ -53,13 +53,16 @@ const StorageSetupGuide: React.FC = () => {
 
       if (error) {
         console.error('Bucket creation error:', error);
+        // eslint-disable-next-line no-restricted-globals
         alert(`버킷 생성 실패: ${error.message}`);
       } else {
+        // eslint-disable-next-line no-restricted-globals
         alert('버킷이 성공적으로 생성되었습니다!');
         setBucketStatus('exists');
       }
     } catch (error: any) {
       console.error('Bucket creation error:', error);
+      // eslint-disable-next-line no-restricted-globals
       alert(`버킷 생성 실패: ${error.message}`);
     }
   };
@@ -68,7 +71,7 @@ const StorageSetupGuide: React.FC = () => {
     return (
       <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
         <div className="flex items-center">
-          <div className="animate-spin h-4 w-4 border-2 border-primary-500 border-t-transparent rounded-full mr-3"></div>
+          <div className="animate-spin h-4 w-4 border-2 border-primary-500 border-t-transparent rounded-full mr-3" />
           <span className="text-sm text-gray-600">Storage 버킷 상태 확인 중...</span>
         </div>
       </div>

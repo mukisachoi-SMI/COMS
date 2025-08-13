@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { testConnection, supabase } from '../utils/supabase';
 import { CheckCircle, XCircle, Loader, AlertCircle, Database } from 'lucide-react';
+import { testConnection, supabase } from '../utils/supabase';
 
 const ConnectionTest: React.FC = () => {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -25,12 +25,20 @@ const ConnectionTest: React.FC = () => {
         setMessage('Supabase 연결 성공!');
         
         // churches 테이블 필드 확인
-        const { data: churchData, error: churchError } = await supabase
+        const { data: churchData } = await supabase
           .from('churches')
           .select('*')
           .limit(1);
         
-        let schemaInfo = null;
+        let schemaInfo: {
+          totalFields: number;
+          fields: string[];
+          hasPhoneField: boolean;
+          hasAddressField: boolean;
+          hasKakaoField: boolean;
+          sampleData: any;
+        } | null = null;
+        
         if (churchData && churchData.length > 0) {
           const fields = Object.keys(churchData[0]);
           schemaInfo = {

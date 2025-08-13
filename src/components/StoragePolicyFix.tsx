@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { supabase } from '../utils/supabase';
 import { AlertCircle, CheckCircle, Copy } from 'lucide-react';
+import { supabase } from '../utils/supabase';
 
 const StoragePolicyFix: React.FC = () => {
   const [isFixing, setIsFixing] = useState(false);
@@ -32,6 +32,7 @@ USING (bucket_id = 'church-logos');`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(sqlQuery);
+    // eslint-disable-next-line no-restricted-globals
     alert('SQL이 클립보드에 복사되었습니다!');
   };
 

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChurchSession } from '../types';
-import ChurchLogo from './ChurchLogo';
 import { 
   Church, 
   Home, 
@@ -15,9 +13,10 @@ import {
   Bell,
   Plus,
   ChevronRight,
-  User,
   HelpCircle
 } from 'lucide-react';
+import { ChurchSession } from '../types';
+import ChurchLogo from './ChurchLogo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -245,7 +244,7 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
         </Link>
         
         {/* 빈 공간 - 중앙 버튼을 위한 자리 */}
-        <div></div>
+        <div />
         
         {/* 보고서 */}
         <Link
@@ -312,7 +311,7 @@ const Layout: React.FC<LayoutProps> = ({ children, session, onLogout }) => {
                 {/* 알림 버튼 */}
                 <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors">
                   <Bell className="w-5 h-5" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
                 </button>
 
                 {/* 사용자 정보 (데스크톱) */}

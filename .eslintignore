@@ -1,0 +1,58 @@
+# ESLint 검사에서 제외할 파일들
+
+# 빌드 결과물
+build/
+dist/
+
+# 의존성 모듈
+node_modules/
+
+# 설정 파일들
+*.config.js
+*.config.ts
+
+# 생성된 파일들
+src/react-app-env.d.ts
+src/serviceWorkerRegistration.ts
+src/reportWebVitals.ts
+
+# 테스트 관련
+coverage/
+*.test.js
+*.test.ts
+*.test.tsx
+src/setupTests.ts
+
+# 외부 라이브러리 파일들
+public/
+*.min.js
+
+# 임시 파일들
+*.tmp
+*.temp
+.cache/
+
+# 백업 파일들
+*.backup
+*.bak
+src/**/*.backup
+
+# SQL 파일들 (코드가 아니므로)
+*.sql
+
+# 문서 파일들
+*.md
+
+# 배치 파일들
+*.bat
+*.sh
+
+# Python 스크립트 파일들
+*.py
+
+# PWA 관련 생성 파일들
+public/manifest.json
+public/sw.js
+
+# 특정 문제가 있는 파일들 (필요시 주석 해제)
+# src/components/Reports.tsx

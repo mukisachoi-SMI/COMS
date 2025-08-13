@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
-import { supabase } from '../utils/supabase';
-import ChurchLogoUpload from './ChurchLogoUpload';
 import { 
   Church as ChurchIcon, 
   DollarSign, 
@@ -17,6 +14,9 @@ import {
   MapPin,
   RefreshCw
 } from 'lucide-react';
+import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
+import { supabase } from '../utils/supabase';
+import ChurchLogoUpload from './ChurchLogoUpload';
 
 interface SettingsProps {
   session: ChurchSession;
@@ -508,7 +508,45 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       return;
     }
 
-    if (!window.confirm('이 헌금 종류를 삭제하시겠습니까?\n관련된 헌금 기록이 있다면 삭제할 수 없습니다.')) return;
+    // 커스텀 확인 다이얼로그 생성
+    const confirmDelete = () => {
+      return new Promise<boolean>((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">헌금 종류 삭제 확인</h3>
+            <p class="text-gray-600 mb-6">이 헌금 종류를 삭제하시겠습니까?<br><span class="text-sm text-red-600">관련된 헌금 기록이 있다면 삭제할 수 없습니다.</span></p>
+            <div class="flex space-x-3">
+              <button id="cancel-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">취소</button>
+              <button id="confirm-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">삭제</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelector('#cancel-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(false);
+        });
+        
+        modal.querySelector('#confirm-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(true);
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(false);
+          }
+        });
+      });
+    };
+    
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
 
     setIsLoading(true);
     try {
@@ -586,7 +624,45 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       return;
     }
 
-    if (!window.confirm('이 직분을 삭제하시겠습니까?\n관련된 교인 정보가 있다면 삭제할 수 없습니다.')) return;
+    // 커스텀 확인 다이얼로그 생성
+    const confirmDelete = () => {
+      return new Promise<boolean>((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">직분 삭제 확인</h3>
+            <p class="text-gray-600 mb-6">이 직분을 삭제하시겠습니까?<br><span class="text-sm text-red-600">관련된 교인 정보가 있다면 삭제할 수 없습니다.</span></p>
+            <div class="flex space-x-3">
+              <button id="cancel-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">취소</button>
+              <button id="confirm-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">삭제</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelector('#cancel-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(false);
+        });
+        
+        modal.querySelector('#confirm-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(true);
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(false);
+          }
+        });
+      });
+    };
+    
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
 
     setIsLoading(true);
     try {
@@ -664,7 +740,45 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       return;
     }
 
-    if (!window.confirm('이 직분 상태를 삭제하시겠습니까?\n관련된 교인 정보가 있다면 삭제할 수 없습니다.')) return;
+    // 커스텀 확인 다이얼로그 생성
+    const confirmDelete = () => {
+      return new Promise<boolean>((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">직분 상태 삭제 확인</h3>
+            <p class="text-gray-600 mb-6">이 직분 상태를 삭제하시겠습니까?<br><span class="text-sm text-red-600">관련된 교인 정보가 있다면 삭제할 수 없습니다.</span></p>
+            <div class="flex space-x-3">
+              <button id="cancel-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">취소</button>
+              <button id="confirm-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">삭제</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelector('#cancel-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(false);
+        });
+        
+        modal.querySelector('#confirm-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(true);
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(false);
+          }
+        });
+      });
+    };
+    
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
 
     setIsLoading(true);
     try {
@@ -1314,7 +1428,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
       {isLoading && activeTab === 'church' ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <div className="spinner mx-auto mb-4"></div>
+            <div className="spinner mx-auto mb-4" />
             <p className="text-gray-600">로딩 중...</p>
           </div>
         </div>

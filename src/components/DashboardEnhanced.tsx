@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChurchSession } from '../types';
-import { supabase } from '../utils/supabase';
 import { 
   TrendingUp, 
   TrendingDown,
   Users, 
   DollarSign,
-
   Award,
   Activity,
   Gift,
-
   ChevronRight,
   ArrowUp,
   ArrowDown,
@@ -23,24 +19,20 @@ import {
   Search,
   ChevronDown,
   Sparkles,
-
-  Eye,
   Clock,
-  Filter,
   RefreshCw,
-  ChevronLeft,
-  MoreVertical,
   Coins,
   Wallet,
   CreditCard,
   Building,
   UserPlus,
-  FileText,
   Download,
   Share2,
   Settings
 } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ChurchSession } from '../types';
+import { supabase } from '../utils/supabase';
 
 interface DashboardEnhancedProps {
   session: ChurchSession;
@@ -198,7 +190,6 @@ const ProgressBar: React.FC<{
 // 메인 대시보드 컴포넌트
 const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [stats, setStats] = useState<DashboardStats>({
     totalMembers: 0,
     monthlyDonation: 0,
@@ -306,10 +297,28 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
           
           try {
             document.execCommand('copy');
-            alert('대시보드 정보가 클립보드에 복사되었습니다!');
+            // 복사 완료 알림 표시
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+            toast.textContent = '📋 대시보드 정보가 클립보드에 복사되었습니다!';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+              toast.classList.add('animate-fade-out');
+              setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
           } catch (err) {
             console.error('Failed to copy:', err);
-            alert('복사에 실패했습니다. 수동으로 복사해주세요.');
+            // 에러 알림 표시
+            const errorToast = document.createElement('div');
+            errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+            errorToast.textContent = '❌ 복사에 실패했습니다. 수동으로 복사해주세요.';
+            document.body.appendChild(errorToast);
+            
+            setTimeout(() => {
+              errorToast.classList.add('animate-fade-out');
+              setTimeout(() => document.body.removeChild(errorToast), 300);
+            }, 3000);
           } finally {
             document.body.removeChild(textArea);
           }
@@ -317,7 +326,16 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
       }
     } catch (error) {
       console.error('Error sharing dashboard:', error);
-      alert('공유 중 오류가 발생했습니다.');
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌공유 중 오류가 발생했습니다.';
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     }
   };
 
@@ -1011,13 +1029,13 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
               <Activity className="w-5 h-5 mr-2 text-gray-600" />
               최근 헌금 활동
             </h3>
-            <Link 
-              to="/donations" 
+            <button 
+              onClick={() => navigate('/donations')}
               className="text-xs text-blue-600 font-medium flex items-center hover:text-blue-700"
             >
               전체보기
               <ChevronRight className="w-3 h-3 ml-0.5" />
-            </Link>
+            </button>
           </div>
           
           {stats.recentDonations.length > 0 ? (

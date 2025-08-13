@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Church, Users, Lock, AlertCircle } from 'lucide-react';
 import { ChurchSession } from '../types';
 import { login } from '../utils/auth';
-import ChurchLogo from './ChurchLogo';
 import { supabase } from '../utils/supabase';
-import { Church, Users, Lock, AlertCircle } from 'lucide-react';
+import ChurchLogo from './ChurchLogo';
 
 interface LoginFormProps {
   onLogin: (session: ChurchSession) => void;
@@ -174,7 +174,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             >
               {isLoading ? (
                 <>
-                  <div className="spinner mr-2"></div>
+                  <div className="spinner mr-2" />
                   로그인 중...
                 </>
               ) : (

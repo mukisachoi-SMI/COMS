@@ -1,5 +1,5 @@
-import { supabase } from './supabase';
 import { ChurchSession } from '../types';
+import { supabase } from './supabase';
 
 // 간단한 패스워드 검증 (평문 비교)
 export const verifyPassword = (inputPassword: string, storedPassword: string): boolean => {
@@ -113,8 +113,21 @@ export const setupAutoLogout = (): void => {
   const resetTimeout = () => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
-      alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-      logout();
+      // 세션 만료 알림 표시
+      const sessionToast = document.createElement('div');
+      sessionToast.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-8 py-4 rounded-lg shadow-xl z-50';
+      sessionToast.innerHTML = `
+        <div class="text-center">
+          <div class="text-lg font-bold mb-2">⏰ 세션 만료</div>
+          <div class="text-sm">세션이 만료되었습니다. 다시 로그인해주세요.</div>
+        </div>
+      `;
+      document.body.appendChild(sessionToast);
+      
+      setTimeout(() => {
+        document.body.removeChild(sessionToast);
+        logout();
+      }, 3000);
     }, 30 * 60 * 1000); // 30분
   };
 

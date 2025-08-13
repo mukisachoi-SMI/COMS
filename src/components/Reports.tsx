@@ -1,35 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { ChurchSession } from '../types';
-import { supabase } from '../utils/supabase';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   FileText, 
   Download, 
   Calendar,
   Users,
-  DollarSign,
   Printer,
   Search,
-  Filter,
   ChevronRight,
-  Receipt,
   BarChart3,
   FileSpreadsheet,
-  CheckCircle,
   CreditCard,
-  Award,
-  FileCheck,
-  ChevronDown,
   TrendingUp,
   TrendingDown,
   Activity,
   PieChart,
   User,
-  Mail,
   Phone,
-  MapPin,
   Clock,
   Gift
 } from 'lucide-react';
+import { ChurchSession } from '../types';
+import { supabase } from '../utils/supabase';
 
 interface ReportsProps {
   session: ChurchSession;
@@ -146,13 +137,14 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
   const [memberReportData, setMemberReportData] = useState<MemberReportData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [showWeeklyDetails, setShowWeeklyDetails] = useState<string | null>(null);
-  const [showMonthlyDetails, setShowMonthlyDetails] = useState<number | null>(null);
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
+
+
 
   useEffect(() => {
     loadInitialData();
-  }, [session.churchId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (filters.reportType === 'donation_receipt') {
@@ -196,7 +188,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
     }
   }, [filters.selectedMonth, filters.reportType]);
 
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       const [membersResult, typesResult] = await Promise.all([
         supabase
@@ -219,7 +211,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
     } catch (error) {
       console.error('Failed to load initial data:', error);
     }
-  };
+  }, [session.churchId]);
 
   const generateReport = async () => {
     setIsLoading(true);
@@ -263,7 +255,16 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
 
     } catch (error) {
       console.error('Report generation error:', error);
-      alert('보고서 생성에 실패했습니다.');
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 보고서 생성에 실패했습니다.';
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -1249,7 +1250,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
           >
             {isLoading ? (
               <>
-                <div className="spinner mr-2"></div>
+                <div className="spinner mr-2" />
                 생성 중...
               </>
             ) : (
@@ -1605,7 +1606,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
                   <td className="text-right font-bold text-lg">
                     {formatCurrency(receiptData.reduce((sum, r) => sum + r.totalAmount, 0))}
                   </td>
-                  <td></td>
+                  <td />
                 </tr>
               </tfoot>
             </table>
@@ -1746,7 +1747,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
                     <td className="text-right font-bold text-lg">
                       {formatCurrency(reportData.total)}
                     </td>
-                    <td></td>
+                    <td />
                   </tr>
                 </tfoot>
               </table>
@@ -1812,7 +1813,7 @@ const Reports: React.FC<ReportsProps> = ({ session }) => {
                   <td className="text-right font-bold text-lg">
                     {formatCurrency(reportData.reduce((sum: number, t: any) => sum + t.total, 0))}
                   </td>
-                  <td colSpan={2}></td>
+                  <td colSpan={2} />
                 </tr>
               </tfoot>
             </table>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { supabase } from '../utils/supabase';
 import { Upload, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { supabase } from '../utils/supabase';
 
 const StorageTestUpload: React.FC = () => {
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'failed'>('idle');
@@ -164,7 +164,7 @@ const StorageTestUpload: React.FC = () => {
         >
           {testStatus === 'testing' ? (
             <>
-              <div className="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+              <div className="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full mr-2" />
               테스트 중...
             </>
           ) : (

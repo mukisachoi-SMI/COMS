@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { supabase } from '../utils/supabase';
 import { Camera, Upload, X, Loader } from 'lucide-react';
+import { supabase } from '../utils/supabase';
 
 interface ChurchLogoUploadProps {
   churchId: string;
@@ -23,12 +23,12 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
 
     // 파일 검증
     if (!file.type.startsWith('image/')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+      window.alert('이미지 파일만 업로드 가능합니다.');
       return;
     }
 
     if (file.size > 500 * 1024) { // 500KB
-      alert('파일 크기는 500KB 이하여야 합니다.');
+      window.alert('파일 크기는 500KB 이하여야 합니다.');
       return;
     }
 
@@ -126,7 +126,7 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
       }
 
       // 새 로고 업로드
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('church-logos')
         .upload(filePath, resizedBlob, {
           contentType: 'image/jpeg',
@@ -167,12 +167,12 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
       }
 
       onUploadSuccess(publicUrl);
-      alert('로고가 성공적으로 업로드되었습니다.');
+      window.alert('로고가 성공적으로 업로드되었습니다.');
 
     } catch (error: any) {
       console.error('Logo upload error:', error);
       const errorMessage = error.message || '로고 업로드에 실패했습니다.';
-      alert(errorMessage);
+      window.alert(errorMessage);
     } finally {
       setIsUploading(false);
     }
@@ -224,11 +224,11 @@ const ChurchLogoUpload: React.FC<ChurchLogoUploadProps> = ({
 
       setPreview('');
       onUploadSuccess('');
-      alert('로고가 삭제되었습니다.');
+      window.alert('로고가 삭제되었습니다.');
 
     } catch (error) {
       console.error('Logo removal error:', error);
-      alert('로고 삭제에 실패했습니다.');
+      window.alert('로고 삭제에 실패했습니다.');
     } finally {
       setIsUploading(false);
     }

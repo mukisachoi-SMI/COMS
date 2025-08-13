@@ -1,36 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ChurchSession, Member, MemberFormData, Position, PositionStatus } from '../types';
-import { supabase } from '../utils/supabase';
-import { IDGenerator } from '../utils/idGenerator';
 import { 
   Users, 
   Plus, 
-  Search, 
   Edit, 
   Trash2, 
   Phone, 
   MapPin,
   Calendar,
   Filter,
-  Download,
   RefreshCw,
-  ChevronDown,
-  ChevronUp,
-  X,
   User,
-  Mail,
-  MoreVertical,
-  ChevronRight,
-  Save,
-  UserPlus,
-  Briefcase,
-  Home,
-  FileText,
-  CheckCircle,
   UserCheck,
   Activity
 } from 'lucide-react';
+import { ChurchSession, Member, MemberFormData, Position, PositionStatus } from '../types';
+import { supabase } from '../utils/supabase';
+import { IDGenerator } from '../utils/idGenerator';
 
 interface MembersProps {
   session: ChurchSession;
@@ -102,22 +88,6 @@ const Members: React.FC<MembersProps> = ({ session }) => {
     }
   }, [location]);
 
-  const loadInitialData = async () => {
-    try {
-      setIsLoading(true);
-      await Promise.all([
-        loadMembers(),
-        loadPositions(),
-        loadPositionStatuses()
-      ]);
-    } catch (err) {
-      console.error('Initial data loading error:', err);
-      setError('데이터를 불러오는데 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const loadPositions = async () => {
     try {
       const { data, error } = await supabase
@@ -177,7 +147,16 @@ const Members: React.FC<MembersProps> = ({ session }) => {
     e.preventDefault();
 
     if (!formData.member_name.trim()) {
-      alert('교인명은 필수 입력 항목입니다.');
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 교인명은 필수 입력 항목입니다.';
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
       return;
     }
 
@@ -226,7 +205,16 @@ const Members: React.FC<MembersProps> = ({ session }) => {
       
     } catch (err: any) {
       console.error('Member save error:', err);
-      alert('저장에 실패했습니다: ' + err.message);
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 저장에 실패했습니다: ' + err.message;
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     } finally {
       setIsSubmitting(false);
     }
@@ -247,7 +235,45 @@ const Members: React.FC<MembersProps> = ({ session }) => {
   };
 
   const handleDelete = async (member: Member) => {
-    if (!window.confirm(`${member.member_name}님을 정말 삭제하시겠습니까?`)) return;
+    // 커스텀 확인 다이얼로그 생성
+    const confirmDelete = () => {
+      return new Promise<boolean>((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">교인 삭제 확인</h3>
+            <p class="text-gray-600 mb-6">${member.member_name}님을 정말 삭제하시겠습니까?</p>
+            <div class="flex space-x-3">
+              <button id="cancel-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">취소</button>
+              <button id="confirm-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">삭제</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelector('#cancel-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(false);
+        });
+        
+        modal.querySelector('#confirm-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(true);
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(false);
+          }
+        });
+      });
+    };
+    
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
 
     try {
       setIsLoading(true);
@@ -265,7 +291,16 @@ const Members: React.FC<MembersProps> = ({ session }) => {
       await loadMembers();
     } catch (err: any) {
       console.error('Member delete error:', err);
-      alert('삭제에 실패했습니다: ' + err.message);
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 삭제에 실패했습니다: ' + err.message;
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -683,7 +718,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
         {isLoading ? (
           <div className="text-center py-8">
-            <div className="spinner mx-auto mb-4"></div>
+            <div className="spinner mx-auto mb-4" />
             <p className="text-gray-600">교인 목록을 불러오는 중...</p>
           </div>
         ) : filteredMembers.length === 0 ? (

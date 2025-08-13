@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { ChurchSession, Donation, Member, DonationType, DonationFormData } from '../types';
-import { supabase } from '../utils/supabase';
-import { IDGenerator } from '../utils/idGenerator';
 import { 
   DollarSign, 
   Plus, 
-  Search, 
   Edit, 
   Trash2, 
   Calendar,
   Filter,
-  Download,
   RefreshCw,
   Users,
-  CreditCard,
   Banknote,
   Receipt
 } from 'lucide-react';
+import { ChurchSession, Donation, Member, DonationType, DonationFormData } from '../types';
+import { supabase } from '../utils/supabase';
+import { IDGenerator } from '../utils/idGenerator';
 
 interface DonationsProps {
   session: ChurchSession;
@@ -64,10 +61,6 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
   const paymentMethods = ['현금', '온라인'];
 
-  useEffect(() => {
-    loadInitialData();
-  }, [session.churchId]);
-
   const loadInitialData = async () => {
     try {
       setIsLoading(true);
@@ -83,6 +76,10 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadInitialData();
+  }, [session.churchId]);
 
   const loadDonations = async () => {
     try {
@@ -146,12 +143,30 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
     e.preventDefault();
 
     if (!formData.donation_type_id || formData.amount <= 0) {
-      alert('헌금 종류와 금액은 필수 입력 항목입니다.');
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 헌금 종류와 금액은 필수 입력 항목입니다.';
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
       return;
     }
 
     if (!formData.member_id && (!formData.donor_name || !formData.donor_name.trim())) {
-      alert('교인을 선택하거나 헌금자명을 입력해주세요.');
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 교인을 선택하거나 헌금자명을 입력해주세요.';
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
       return;
     }
 
@@ -207,7 +222,16 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       
     } catch (err: any) {
       console.error('Donation save error:', err);
-      alert('저장에 실패했습니다: ' + err.message);
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 저장에 실패했습니다: ' + err.message;
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -228,9 +252,45 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
   };
 
   const handleDelete = async (donation: Donation) => {
-    if (!window.confirm(`${formatCurrency(donation.amount)} 헌금을 삭제하시겠습니까?`)) {
-      return;
-    }
+    // 커스텀 확인 다이얼로그 생성
+    const confirmDelete = () => {
+      return new Promise<boolean>((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">헌금 삭제 확인</h3>
+            <p class="text-gray-600 mb-6">${formatCurrency(donation.amount)} 헌금을 삭제하시겠습니까?</p>
+            <div class="flex space-x-3">
+              <button id="cancel-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">취소</button>
+              <button id="confirm-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">삭제</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelector('#cancel-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(false);
+        });
+        
+        modal.querySelector('#confirm-btn')?.addEventListener('click', () => {
+          document.body.removeChild(modal);
+          resolve(true);
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(false);
+          }
+        });
+      });
+    };
+    
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
 
     try {
       setIsLoading(true);
@@ -249,7 +309,16 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       await loadDonations();
     } catch (err: any) {
       console.error('Donation delete error:', err);
-      alert('삭제에 실패했습니다: ' + err.message);
+      // 에러 알림 표시
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+      errorToast.textContent = '❌ 삭제에 실패했습니다: ' + err.message;
+      document.body.appendChild(errorToast);
+      
+      setTimeout(() => {
+        errorToast.classList.add('animate-fade-out');
+        setTimeout(() => document.body.removeChild(errorToast), 300);
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -645,7 +714,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
         {isLoading ? (
           <div className="text-center py-8">
-            <div className="spinner mx-auto mb-4"></div>
+            <div className="spinner mx-auto mb-4" />
             <p className="text-gray-600">헌금 내역을 불러오는 중...</p>
           </div>
         ) : filteredDonations.length === 0 ? (

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ChurchSession, Member, DonationType } from '../types';
-import { supabase } from '../utils/supabase';
-import { IDGenerator } from '../utils/idGenerator';
 import { 
-  Plus, 
   X,
-  Check,
-  Calendar,
   Users,
-  DollarSign,
   Banknote,
   CreditCard,
-  ChevronLeft,
-  ChevronRight
+  ChevronLeft
 } from 'lucide-react';
+import { ChurchSession, DonationType } from '../types';
+import { supabase } from '../utils/supabase';
+import { IDGenerator } from '../utils/idGenerator';
 
 interface MobileDonationProps {
   session: ChurchSession;
@@ -73,12 +68,12 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   const handleSubmit = async () => {
     if (!formData.donation_type_id || formData.amount <= 0) {
-      alert('헌금 종류와 금액을 확인해주세요.');
+      window.alert('헌금 종류와 금액을 확인해주세요.');
       return;
     }
 
     if (!formData.member_id && !formData.donor_name.trim()) {
-      alert('헌금자를 선택하거나 이름을 입력해주세요.');
+      window.alert('헌금자를 선택하거나 이름을 입력해주세요.');
       return;
     }
 
@@ -107,13 +102,13 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
       if (error) throw error;
 
-      alert('헌금이 등록되었습니다.');
+      window.alert('헌금이 등록되었습니다.');
       onSuccess?.();
       handleReset();
       
     } catch (err: any) {
       console.error('Donation save error:', err);
-      alert('저장에 실패했습니다.');
+      window.alert('저장에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -181,10 +176,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
           className="w-full px-4 py-3 text-lg border rounded-lg"
           onChange={(e) => {
             const searchTerm = e.target.value.toLowerCase();
-            const filtered = members.filter(m => 
-              m.member_name.toLowerCase().includes(searchTerm)
-            );
-            // 검색 결과 표시 로직
+            // 검색 결과 표시 로직 삭제
           }}
         />
         

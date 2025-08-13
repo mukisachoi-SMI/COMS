@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Book, 
-  ChevronRight, 
   Home, 
   Users, 
   DollarSign, 
   FileText, 
   Settings, 
   Heart,
-  Lightbulb,
   HelpCircle,
-  Play,
   Download,
   Shield,
   Church,
@@ -18,14 +15,7 @@ import {
   Mail,
   MessageCircle,
   CheckCircle,
-  ArrowRight,
-  Star,
-  TrendingUp,
-  UserCheck,
-  Calendar,
-  PieChart,
-  BarChart,
-  Target
+  PieChart
 } from 'lucide-react';
 
 interface HelpProps {
@@ -34,15 +24,6 @@ interface HelpProps {
 
 const Help: React.FC<HelpProps> = ({ isStandalone = false }) => {
   const [activeSection, setActiveSection] = useState('intro');
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
-
-  const toggleExpand = (id: string) => {
-    setExpandedItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
-  };
 
   const sections = [
     { id: 'intro', name: '시작하기', icon: Home },
