@@ -169,7 +169,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
       <h3 className="text-lg font-bold text-center text-gray-900">헌금자 선택</h3>
       
       {/* 교인 검색 */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <input
           type="text"
           placeholder="교인 이름 검색..."
@@ -241,7 +241,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
       
       {/* 금액 입력 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">헌금액</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">헌금액</label>
         <div className="relative">
           <input
             type="text"
@@ -306,7 +306,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
       {/* 날짜 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">헌금 날짜</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">헌금 날짜</label>
         <input
           type="date"
           value={formData.donation_date}
@@ -321,7 +321,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
         <textarea
           value={formData.notes}
           onChange={(e) => setFormData({...formData, notes: e.target.value})}
-          className="w-full px-4 py-3 border rounded-lg text-gray-900"
+          className="w-full px-4 py-3 border rounded-lg text-gray-900 dark:text-gray-100"
           rows={2}
           placeholder="추가 정보..."
         />
