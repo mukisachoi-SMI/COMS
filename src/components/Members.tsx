@@ -711,7 +711,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
       {/* 교인 목록 */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium">
+          <h3 className="text-lg font-medium text-gray-900">
             교인 목록 ({filteredMembers.length}명)
           </h3>
         </div>
