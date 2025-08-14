@@ -707,7 +707,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       {/* 헌금 목록 */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium">
+          <h3 className="text-lg font-medium text-gray-900">
             헌금 내역 ({filteredDonations.length}건)
           </h3>
         </div>
