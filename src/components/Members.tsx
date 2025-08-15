@@ -573,7 +573,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
       {showAddForm && (
         <div className="card">
           <div className="card-header">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900">
               {editingMember ? '교인 정보 수정' : '새 교인 등록'}
             </h3>
           </div>
@@ -582,7 +582,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* 교인명 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   교인명 *
                 </label>
                 <input
@@ -597,7 +597,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 전화번호 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   전화번호
                 </label>
                 <input
@@ -611,7 +611,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 생년월일 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   생년월일
                 </label>
                 <input
@@ -624,7 +624,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 직분 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   직분
                 </label>
                 <select
@@ -643,7 +643,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 직분 상태 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   직분 상태
                 </label>
                 <select
@@ -662,7 +662,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 주소 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   주소
                 </label>
                 <input
@@ -676,7 +676,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
 
               {/* 메모 */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   메모
                 </label>
                 <textarea
