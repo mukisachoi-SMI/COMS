@@ -60,34 +60,7 @@ const Members: React.FC<MembersProps> = ({ session }) => {
     hasAddress: ''
   });
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true);
-        await Promise.all([
-          loadMembers(),
-          loadPositions(),
-          loadPositionStatuses()
-        ]);
-      } catch (err) {
-        console.error('Initial data loading error:', err);
-        setError('데이터를 불러오는데 실패했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadData();
-  }, [session.churchId]);
-
-  // 대시보드에서 교인등록 버튼을 통해 왔을 경우 자동으로 폼 열기
-  useEffect(() => {
-    if (location.state && (location.state as any).openAddMember) {
-      setShowAddForm(true);
-      // state 초기화 (다시 돌아왔을 때 자동으로 열리지 않도록)
-      window.history.replaceState({}, document.title);
-    }
-  }, [location]);
-
+  // 함수 선언을 useEffect 보다 위로 이동
   const loadPositions = async () => {
     try {
       const { data, error } = await supabase
@@ -142,6 +115,35 @@ const Members: React.FC<MembersProps> = ({ session }) => {
       throw err;
     }
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        await Promise.all([
+          loadMembers(),
+          loadPositions(),
+          loadPositionStatuses()
+        ]);
+      } catch (err) {
+        console.error('Initial data loading error:', err);
+        setError('데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.churchId]);
+
+  // 대시보드에서 교인등록 버튼을 통해 왔을 경우 자동으로 폼 열기
+  useEffect(() => {
+    if (location.state && (location.state as any).openAddMember) {
+      setShowAddForm(true);
+      // state 초기화 (다시 돌아왔을 때 자동으로 열리지 않도록)
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

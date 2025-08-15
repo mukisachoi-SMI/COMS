@@ -61,26 +61,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
   const paymentMethods = ['현금', '온라인'];
 
-  const loadInitialData = async () => {
-    try {
-      setIsLoading(true);
-      await Promise.all([
-        loadDonations(),
-        loadMembers(),
-        loadDonationTypes()
-      ]);
-    } catch (err) {
-      console.error('Initial data loading error:', err);
-      setError('데이터를 불러오는데 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadInitialData();
-  }, [session.churchId]);
-
+  // 함수 선언을 useEffect 보다 위로 이동
   const loadDonations = async () => {
     try {
       const { data, error: queryError } = await supabase
@@ -138,6 +119,27 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       throw err;
     }
   };
+
+  const loadInitialData = async () => {
+    try {
+      setIsLoading(true);
+      await Promise.all([
+        loadDonations(),
+        loadMembers(),
+        loadDonationTypes()
+      ]);
+    } catch (err) {
+      console.error('Initial data loading error:', err);
+      setError('데이터를 불러오는데 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.churchId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

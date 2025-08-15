@@ -984,52 +984,52 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     );
   };
 
-  // 직분 상태 순서 수정 함수
-  const fixPositionStatusOrder = async () => {
-    setIsLoading(true);
-    try {
-      // 청년 상태 추가 (없으면)
-      const hasYoung = positionStatuses.some(s => s.status_code === 'YOUNG');
-      if (!hasYoung) {
-        await supabase
-          .from('position_statuses')
-          .insert({
-            church_id: session.churchId,
-            status_name: '청년',
-            status_code: 'YOUNG',
-            is_active: true,
-            sort_order: 2
-          });
-      }
+  // 직분 상태 순서 수정 함수 - 현재 사용하지 않음
+  // const fixPositionStatusOrder = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     // 청년 상태 추가 (없으면)
+  //     const hasYoung = positionStatuses.some(s => s.status_code === 'YOUNG');
+  //     if (!hasYoung) {
+  //       await supabase
+  //         .from('position_statuses')
+  //         .insert({
+  //           church_id: session.churchId,
+  //           status_name: '청년',
+  //           status_code: 'YOUNG',
+  //           is_active: true,
+  //           sort_order: 2
+  //         });
+  //     }
 
-      // 순서 업데이트
-      const updates = [
-        { code: 'ACTIVE', order: 1 },
-        { code: 'YOUNG', order: 2 },
-        { code: 'RETIRED', order: 3 },
-        { code: 'ASSOCIATE', order: 4 },
-        { code: 'EMERITUS', order: 5 },
-        { code: 'STAFF', order: 6 }
-      ];
+  //     // 순서 업데이트
+  //     const updates = [
+  //       { code: 'ACTIVE', order: 1 },
+  //       { code: 'YOUNG', order: 2 },
+  //       { code: 'RETIRED', order: 3 },
+  //       { code: 'ASSOCIATE', order: 4 },
+  //       { code: 'EMERITUS', order: 5 },
+  //       { code: 'STAFF', order: 6 }
+  //     ];
 
-      for (const update of updates) {
-        await supabase
-          .from('position_statuses')
-          .update({ sort_order: update.order })
-          .eq('church_id', session.churchId)
-          .eq('status_code', update.code);
-      }
+  //     for (const update of updates) {
+  //       await supabase
+  //         .from('position_statuses')
+  //         .update({ sort_order: update.order })
+  //         .eq('church_id', session.churchId)
+  //         .eq('status_code', update.code);
+  //     }
 
-      // 다시 로드
-      await loadPositionStatuses();
-      showMessage('success', '직분 상태 순서가 수정되었습니다.');
-    } catch (error: any) {
-      console.error('Failed to fix position status order:', error);
-      showMessage('error', `순서 수정 실패: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     // 다시 로드
+  //     await loadPositionStatuses();
+  //     showMessage('success', '직분 상태 순서가 수정되었습니다.');
+  //   } catch (error: any) {
+  //     console.error('Failed to fix position status order:', error);
+  //     showMessage('error', `순서 수정 실패: ${error.message}`);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const renderPositionStatuses = () => (
     <div className="space-y-6">

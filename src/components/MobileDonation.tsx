@@ -41,6 +41,7 @@ const MobileDonation: React.FC<MobileDonationProps> = ({ session, onClose, onSuc
 
   useEffect(() => {
     loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.churchId]);
 
   // 교인 검색 필터링

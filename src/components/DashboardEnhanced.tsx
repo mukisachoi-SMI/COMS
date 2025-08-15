@@ -102,7 +102,7 @@ const StatCard: React.FC<{
   subtitle?: string;
   onClick?: () => void;
   trend?: 'up' | 'down' | 'stable';
-}> = ({ title, value, change, icon, color, subtitle, onClick, trend }) => {
+}> = ({ title, value, change, icon, color, subtitle, onClick }) => {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -339,23 +339,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
     }
   };
 
-  useEffect(() => {
-    loadDashboardData();
-    
-    // 실시간 업데이트 구독
-    const subscription = supabase
-      .channel('dashboard_updates')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'donations' },
-        () => loadDashboardData()
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [session.churchId]);
-
+  // 함수 선언을 useEffect 보다 위로 이동
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
@@ -532,7 +516,7 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
       const topDonors = Array.from(donorMap.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10)
-        .map(([name, amount], index) => {
+        .map(([name, amount], _index) => {
           // 한국 이름의 경우 성을 제외한 이름 부분만 아바타에 표시
           const nameForAvatar = name.length >= 3 ? name.substring(1) : name;
           return {
@@ -638,6 +622,24 @@ const DashboardEnhanced: React.FC<DashboardEnhancedProps> = ({ session }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadDashboardData();
+    
+    // 실시간 업데이트 구독
+    const subscription = supabase
+      .channel('dashboard_updates')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'donations' },
+        () => loadDashboardData()
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.churchId]);
 
   // 포맷팅 함수들
   const formatCurrency = (amount: number) => {
