@@ -13,7 +13,7 @@ import {
   Phone,
   MapPin,
   RefreshCw,
-  Edit2,
+  Edit,
   Check,
   X,
   ChevronUp,
@@ -1282,7 +1282,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editPositionStatusData.status_name || ''}
                         onChange={(e) => setEditPositionStatusData({...editPositionStatusData, status_name: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       status.status_name
@@ -1294,7 +1294,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editPositionStatusData.status_code || ''}
                         onChange={(e) => setEditPositionStatusData({...editPositionStatusData, status_code: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       status.status_code
@@ -1358,7 +1358,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                             className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
                             title="수정"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => removePositionStatus(status.status_id)}
@@ -1466,7 +1466,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editDonationTypeData.type_name || ''}
                         onChange={(e) => setEditDonationTypeData({...editDonationTypeData, type_name: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       type.type_name
@@ -1478,7 +1478,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editDonationTypeData.type_code || ''}
                         onChange={(e) => setEditDonationTypeData({...editDonationTypeData, type_code: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       type.type_code
@@ -1542,7 +1542,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                             className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
                             title="수정"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => removeDonationType(type.type_id)}
@@ -1650,7 +1650,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editPositionData.position_name || ''}
                         onChange={(e) => setEditPositionData({...editPositionData, position_name: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       position.position_name
@@ -1662,7 +1662,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                         type="text"
                         value={editPositionData.position_code || ''}
                         onChange={(e) => setEditPositionData({...editPositionData, position_code: e.target.value})}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     ) : (
                       position.position_code
@@ -1726,7 +1726,7 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                             className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
                             title="수정"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => removePosition(position.position_id)}
