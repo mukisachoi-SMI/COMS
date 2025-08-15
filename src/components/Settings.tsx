@@ -12,7 +12,12 @@ import {
   MessageCircle,
   Phone,
   MapPin,
-  RefreshCw
+  RefreshCw,
+  Edit2,
+  Check,
+  X,
+  ChevronUp,
+  ChevronDown
 } from 'lucide-react';
 import { ChurchSession, Church, DonationType, Position, PositionStatus } from '../types';
 import { supabase } from '../utils/supabase';
@@ -46,10 +51,14 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
   // 헌금 종류 상태
   const [donationTypes, setDonationTypes] = useState<DonationType[]>([]);
   const [newDonationType, setNewDonationType] = useState({ type_name: '', type_code: '' });
+  const [editingDonationType, setEditingDonationType] = useState<string | null>(null);
+  const [editDonationTypeData, setEditDonationTypeData] = useState<Partial<DonationType>>({});
 
   // 직분 상태
   const [positions, setPositions] = useState<Position[]>([]);
   const [newPosition, setNewPosition] = useState({ position_name: '', position_code: '' });
+  const [editingPosition, setEditingPosition] = useState<string | null>(null);
+  const [editPositionData, setEditPositionData] = useState<Partial<Position>>({});
 
   // 직분 상태 관리
   const [positionStatuses, setPositionStatuses] = useState<PositionStatus[]>([]);
@@ -57,6 +66,8 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     status_name: '', 
     status_code: '' 
   });
+  const [editingPositionStatus, setEditingPositionStatus] = useState<string | null>(null);
+  const [editPositionStatusData, setEditPositionStatusData] = useState<Partial<PositionStatus>>({});
 
   const tabs: TabData[] = [
     { id: 'church', name: '교회 정보', icon: ChurchIcon },
@@ -461,6 +472,100 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     }
   };
 
+  // 헌금 종류 순서 변경
+  const moveDonationType = async (index: number, direction: 'up' | 'down') => {
+    const newTypes = [...donationTypes];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newTypes.length) return;
+    
+    // 순서 교환
+    const temp = newTypes[index];
+    newTypes[index] = newTypes[targetIndex];
+    newTypes[targetIndex] = temp;
+    
+    // sort_order 업데이트
+    newTypes[index].sort_order = index + 1;
+    newTypes[targetIndex].sort_order = targetIndex + 1;
+    
+    setIsLoading(true);
+    try {
+      // 두 항목 모두 업데이트
+      const promises = [
+        supabase
+          .from('donation_types')
+          .update({ sort_order: newTypes[index].sort_order })
+          .eq('type_id', newTypes[index].type_id),
+        supabase
+          .from('donation_types')
+          .update({ sort_order: newTypes[targetIndex].sort_order })
+          .eq('type_id', newTypes[targetIndex].type_id)
+      ];
+      
+      await Promise.all(promises);
+      setDonationTypes(newTypes);
+      showMessage('success', '순서가 변경되었습니다.');
+    } catch (error: any) {
+      console.error('Failed to reorder:', error);
+      showMessage('error', '순서 변경에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 헌금 종류 수정 시작
+  const startEditDonationType = (type: DonationType) => {
+    setEditingDonationType(type.type_id);
+    setEditDonationTypeData({
+      type_name: type.type_name,
+      type_code: type.type_code
+    });
+  };
+
+  // 헌금 종류 수정 취소
+  const cancelEditDonationType = () => {
+    setEditingDonationType(null);
+    setEditDonationTypeData({});
+  };
+
+  // 헌금 종류 수정 저장
+  const saveDonationType = async (typeId: string) => {
+    if (!editDonationTypeData.type_name?.trim()) {
+      showMessage('error', '헌금 종류명을 입력해주세요.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('donation_types')
+        .update({
+          type_name: editDonationTypeData.type_name.trim(),
+          type_code: editDonationTypeData.type_code?.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('type_id', typeId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setDonationTypes(donationTypes.map(type => 
+          type.type_id === typeId ? data : type
+        ));
+        setEditingDonationType(null);
+        setEditDonationTypeData({});
+        showMessage('success', '헌금 종류가 수정되었습니다.');
+      }
+    } catch (error: any) {
+      console.error('Failed to update donation type:', error);
+      showMessage('error', `헌금 종류 수정 실패: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removeDonationType = async (typeId: string) => {
     const confirmDelete = () => {
       return new Promise<boolean>((resolve) => {
@@ -580,6 +685,91 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     }
   };
 
+  // 직분 순서 변경
+  const movePosition = async (index: number, direction: 'up' | 'down') => {
+    const newPositions = [...positions];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newPositions.length) return;
+    
+    const temp = newPositions[index];
+    newPositions[index] = newPositions[targetIndex];
+    newPositions[targetIndex] = temp;
+    
+    newPositions[index].sort_order = index + 1;
+    newPositions[targetIndex].sort_order = targetIndex + 1;
+    
+    setIsLoading(true);
+    try {
+      const promises = [
+        supabase.from('positions')
+          .update({ sort_order: newPositions[index].sort_order })
+          .eq('position_id', newPositions[index].position_id),
+        supabase.from('positions')
+          .update({ sort_order: newPositions[targetIndex].sort_order })
+          .eq('position_id', newPositions[targetIndex].position_id)
+      ];
+      
+      await Promise.all(promises);
+      setPositions(newPositions);
+      showMessage('success', '순서가 변경되었습니다.');
+    } catch (error: any) {
+      showMessage('error', '순서 변경에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 직분 수정
+  const startEditPosition = (position: Position) => {
+    setEditingPosition(position.position_id);
+    setEditPositionData({
+      position_name: position.position_name,
+      position_code: position.position_code
+    });
+  };
+
+  const cancelEditPosition = () => {
+    setEditingPosition(null);
+    setEditPositionData({});
+  };
+
+  const savePosition = async (positionId: string) => {
+    if (!editPositionData.position_name?.trim()) {
+      showMessage('error', '직분명을 입력해주세요.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('positions')
+        .update({
+          position_name: editPositionData.position_name.trim(),
+          position_code: editPositionData.position_code?.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('position_id', positionId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setPositions(positions.map(pos => 
+          pos.position_id === positionId ? data : pos
+        ));
+        setEditingPosition(null);
+        setEditPositionData({});
+        showMessage('success', '직분이 수정되었습니다.');
+      }
+    } catch (error: any) {
+      showMessage('error', `직분 수정 실패: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removePosition = async (positionId: string) => {
     const confirmDelete = () => {
       return new Promise<boolean>((resolve) => {
@@ -694,6 +884,91 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
     } catch (error: any) {
       console.error('Failed to add position status:', error);
       showMessage('error', `직분 상태 추가 실패: ${error.message || '알 수 없는 오류'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 직분 상태 순서 변경
+  const movePositionStatus = async (index: number, direction: 'up' | 'down') => {
+    const newStatuses = [...positionStatuses];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newStatuses.length) return;
+    
+    const temp = newStatuses[index];
+    newStatuses[index] = newStatuses[targetIndex];
+    newStatuses[targetIndex] = temp;
+    
+    newStatuses[index].sort_order = index + 1;
+    newStatuses[targetIndex].sort_order = targetIndex + 1;
+    
+    setIsLoading(true);
+    try {
+      const promises = [
+        supabase.from('position_statuses')
+          .update({ sort_order: newStatuses[index].sort_order })
+          .eq('status_id', newStatuses[index].status_id),
+        supabase.from('position_statuses')
+          .update({ sort_order: newStatuses[targetIndex].sort_order })
+          .eq('status_id', newStatuses[targetIndex].status_id)
+      ];
+      
+      await Promise.all(promises);
+      setPositionStatuses(newStatuses);
+      showMessage('success', '순서가 변경되었습니다.');
+    } catch (error: any) {
+      showMessage('error', '순서 변경에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 직분 상태 수정
+  const startEditPositionStatus = (status: PositionStatus) => {
+    setEditingPositionStatus(status.status_id);
+    setEditPositionStatusData({
+      status_name: status.status_name,
+      status_code: status.status_code
+    });
+  };
+
+  const cancelEditPositionStatus = () => {
+    setEditingPositionStatus(null);
+    setEditPositionStatusData({});
+  };
+
+  const savePositionStatus = async (statusId: string) => {
+    if (!editPositionStatusData.status_name?.trim()) {
+      showMessage('error', '직분 상태명을 입력해주세요.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('position_statuses')
+        .update({
+          status_name: editPositionStatusData.status_name.trim(),
+          status_code: editPositionStatusData.status_code?.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('status_id', statusId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setPositionStatuses(positionStatuses.map(status => 
+          status.status_id === statusId ? data : status
+        ));
+        setEditingPositionStatus(null);
+        setEditPositionStatusData({});
+        showMessage('success', '직분 상태가 수정되었습니다.');
+      }
+    } catch (error: any) {
+      showMessage('error', `직분 상태 수정 실패: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -990,19 +1265,40 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   상태
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  순서
+                </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   작업
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {positionStatuses.map((status) => (
+              {positionStatuses.map((status, index) => (
                 <tr key={status.status_id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {status.status_name}
+                    {editingPositionStatus === status.status_id ? (
+                      <input
+                        type="text"
+                        value={editPositionStatusData.status_name || ''}
+                        onChange={(e) => setEditPositionStatusData({...editPositionStatusData, status_name: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      status.status_name
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {status.status_code}
+                    {editingPositionStatus === status.status_id ? (
+                      <input
+                        type="text"
+                        value={editPositionStatusData.status_code || ''}
+                        onChange={(e) => setEditPositionStatusData({...editPositionStatusData, status_code: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      status.status_code
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -1013,20 +1309,74 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                       {status.is_active ? '활성' : '비활성'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => removePositionStatus(status.status_id)}
-                      disabled={isLoading}
-                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-1">
+                      <button
+                        onClick={() => movePositionStatus(index, 'up')}
+                        disabled={isLoading || index === 0}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="위로 이동"
+                      >
+                        <ChevronUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => movePositionStatus(index, 'down')}
+                        disabled={isLoading || index === positionStatuses.length - 1}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="아래로 이동"
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      {editingPositionStatus === status.status_id ? (
+                        <>
+                          <button
+                            onClick={() => savePositionStatus(status.status_id)}
+                            disabled={isLoading}
+                            className="text-green-600 hover:text-green-900 disabled:opacity-50"
+                            title="저장"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={cancelEditPositionStatus}
+                            disabled={isLoading}
+                            className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                            title="취소"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => startEditPositionStatus(status)}
+                            disabled={isLoading || editingPositionStatus !== null}
+                            className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                            title="수정"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => removePositionStatus(status.status_id)}
+                            disabled={isLoading || editingPositionStatus !== null}
+                            className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                            title="삭제"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
               {positionStatuses.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
                     직분 상태가 없습니다.
                   </td>
                 </tr>
@@ -1099,19 +1449,40 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   상태
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  순서
+                </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   작업
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {donationTypes.map((type) => (
+              {donationTypes.map((type, index) => (
                 <tr key={type.type_id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {type.type_name}
+                    {editingDonationType === type.type_id ? (
+                      <input
+                        type="text"
+                        value={editDonationTypeData.type_name || ''}
+                        onChange={(e) => setEditDonationTypeData({...editDonationTypeData, type_name: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      type.type_name
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {type.type_code}
+                    {editingDonationType === type.type_id ? (
+                      <input
+                        type="text"
+                        value={editDonationTypeData.type_code || ''}
+                        onChange={(e) => setEditDonationTypeData({...editDonationTypeData, type_code: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      type.type_code
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -1122,20 +1493,74 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                       {type.is_active ? '활성' : '비활성'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => removeDonationType(type.type_id)}
-                      disabled={isLoading}
-                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-1">
+                      <button
+                        onClick={() => moveDonationType(index, 'up')}
+                        disabled={isLoading || index === 0}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="위로 이동"
+                      >
+                        <ChevronUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => moveDonationType(index, 'down')}
+                        disabled={isLoading || index === donationTypes.length - 1}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="아래로 이동"
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      {editingDonationType === type.type_id ? (
+                        <>
+                          <button
+                            onClick={() => saveDonationType(type.type_id)}
+                            disabled={isLoading}
+                            className="text-green-600 hover:text-green-900 disabled:opacity-50"
+                            title="저장"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={cancelEditDonationType}
+                            disabled={isLoading}
+                            className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                            title="취소"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => startEditDonationType(type)}
+                            disabled={isLoading || editingDonationType !== null}
+                            className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                            title="수정"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => removeDonationType(type.type_id)}
+                            disabled={isLoading || editingDonationType !== null}
+                            className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                            title="삭제"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
               {donationTypes.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
                     헌금 종류가 없습니다.
                   </td>
                 </tr>
@@ -1208,19 +1633,40 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   상태
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  순서
+                </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   작업
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {positions.map((position) => (
+              {positions.map((position, index) => (
                 <tr key={position.position_id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {position.position_name}
+                    {editingPosition === position.position_id ? (
+                      <input
+                        type="text"
+                        value={editPositionData.position_name || ''}
+                        onChange={(e) => setEditPositionData({...editPositionData, position_name: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      position.position_name
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {position.position_code}
+                    {editingPosition === position.position_id ? (
+                      <input
+                        type="text"
+                        value={editPositionData.position_code || ''}
+                        onChange={(e) => setEditPositionData({...editPositionData, position_code: e.target.value})}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    ) : (
+                      position.position_code
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -1231,20 +1677,74 @@ const Settings: React.FC<SettingsProps> = ({ session }) => {
                       {position.is_active ? '활성' : '비활성'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => removePosition(position.position_id)}
-                      disabled={isLoading}
-                      className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-1">
+                      <button
+                        onClick={() => movePosition(index, 'up')}
+                        disabled={isLoading || index === 0}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="위로 이동"
+                      >
+                        <ChevronUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => movePosition(index, 'down')}
+                        disabled={isLoading || index === positions.length - 1}
+                        className="p-1 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="아래로 이동"
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      {editingPosition === position.position_id ? (
+                        <>
+                          <button
+                            onClick={() => savePosition(position.position_id)}
+                            disabled={isLoading}
+                            className="text-green-600 hover:text-green-900 disabled:opacity-50"
+                            title="저장"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={cancelEditPosition}
+                            disabled={isLoading}
+                            className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                            title="취소"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => startEditPosition(position)}
+                            disabled={isLoading || editingPosition !== null}
+                            className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                            title="수정"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => removePosition(position.position_id)}
+                            disabled={isLoading || editingPosition !== null}
+                            className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                            title="삭제"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
               {positions.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
                     직분이 없습니다.
                   </td>
                 </tr>
