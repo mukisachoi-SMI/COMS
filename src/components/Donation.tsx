@@ -543,7 +543,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
       {showAddForm && (
         <div className="card">
           <div className="card-header">
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg font-medium text-gray-900">
               {editingDonation ? '헌금 내역 수정' : '새 헌금 등록'}
             </h3>
           </div>
@@ -552,7 +552,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* 교인 선택 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   교인 선택
                 </label>
                 <select
@@ -577,7 +577,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 비교인 이름 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   비교인 이름 (교인 미선택시)
                 </label>
                 <input
@@ -592,7 +592,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 헌금 종류 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   헌금 종류 *
                 </label>
                 <select
@@ -612,7 +612,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 헌금액 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   헌금액 * (원)
                 </label>
                 <div className="relative">
@@ -640,7 +640,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 헌금 날짜 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   헌금 날짜 *
                 </label>
                 <input
@@ -654,7 +654,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 헌금방법 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   헌금방법
                 </label>
                 <select
@@ -672,7 +672,7 @@ const Donations: React.FC<DonationsProps> = ({ session }) => {
 
               {/* 메모 */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   메모
                 </label>
                 <textarea
