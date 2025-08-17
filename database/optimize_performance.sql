@@ -177,8 +177,9 @@ USING (
 
 -- 7. VACUUM 실행 (공간 정리)
 -- ============================================
-VACUUM ANALYZE donations;
-VACUUM ANALYZE members;
+-- 주의: VACUUM은 별도로 실행해야 합니다 (트랜잭션 외부에서)
+-- VACUUM ANALYZE donations;
+-- VACUUM ANALYZE members;
 
 -- ============================================
 -- 실행 방법:
